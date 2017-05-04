@@ -1,9 +1,9 @@
 {
-  "name": "mbview",
-  "version": "1.15.1",
-  "description": "Watch mbtiles in your localhost",
+  "name": "mapview",
+  "version": "0.0.1",
+  "description": "View mbtiles locally",
   "bin": {
-    "mbview": "./cli.js"
+    "mapview": "./cli.js"
   },
   "main": "server.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "mapbox",
     "mbtiles"
   ],
-  "author": "Rodolfo Wilhelmy <rwilhelmy@gmail.com> (http://wilhel.me)",
+  "author": "",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^2.13.1",
@@ -35,10 +35,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mapbox/mbview.git"
+    "url": "git://github.com/aaronlidman/mapview.git"
   },
   "bugs": {
-    "url": "https://github.com/mapbox/mbview/issues"
-  },
-  "homepage": "https://github.com/mapbox/mbview#readme"
+    "url": "https://github.com/aaronlidman/mapview/issues"
+  }
 }

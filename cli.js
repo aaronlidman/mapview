@@ -33,9 +33,7 @@ try {
 
 argv.basemap = argv.basemap || argv.base || argv.map || 'dark';
 
-
-var MBView = require('./mbview');
-
+var mapview = require('./mapview');
 var params = {
   center: argv.center || [-122.42, 37.75],
   mbtiles: mbtiles,
@@ -46,7 +44,7 @@ var params = {
   accessToken: accessToken
 };
 
-MBView.serve(params, function (err, config) {
+mapview.serve(params, function (err, config) {
   console.log('Listening on http://localhost:' + config.port);
   if (!argv.n) open('http://localhost:' + config.port);
 });

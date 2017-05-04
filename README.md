@@ -1,10 +1,8 @@
-[![Build Status](https://travis-ci.org/mapbox/mbview.svg?branch=master)](https://travis-ci.org/mapbox/mbview)
+[![Build Status](https://travis-ci.org/aaronlidman/mapview.svg?branch=master)](https://travis-ci.org/aaronlidman/mapview)
 
-# mbview
+# mapview
 
-Watch MBTiles in your localhost
-
-![demo](https://raw.githubusercontent.com/mapbox/mbview/master/demo.gif)
+View mbtiles locally. A quick way to inspect what is in your mbtiles file without having to upload it to some service. Great quick for quick iteration on map data projects.
 
 ```bash
 % npm install
@@ -15,8 +13,8 @@ Watch MBTiles in your localhost
 Global install
 
 ```bash
-% npm install -g mbview
-% mbview
+% npm install -g mapview
+% mapview <options>
 ```
 
 Or just try the demo
@@ -26,7 +24,7 @@ Or just try the demo
 % ./try.sh
 ```
 
-Type `mbview --help` to see the parameters available.
+Type `mapview --help` to see the parameters available.
 
 **Awesome stuff**
 

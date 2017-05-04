@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>mbview - vector</title>
+  <title>mapview - vector</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
@@ -10,36 +10,36 @@
   <style>
     body { margin:0; padding:0; }
     #map { position:absolute; top:0; bottom:0; width:100%; }
-    .mbview_popup {
+    .mapview_popup {
       color: #333;
       display: table;
       font-family: "Open Sans", sans-serif;
       font-size: 10px;
     }
 
-    .mbview_feature:not(:last-child) {
+    .mapview_feature:not(:last-child) {
       border-bottom: 1px solid #ccc;
     }
 
-    .mbview_layer:before {
+    .mapview_layer:before {
       content: '#';
     }
 
-    .mbview_layer {
+    .mapview_layer {
       display: block;
       font-weight: bold;
     }
 
-    .mbview_property {
+    .mapview_property {
       display: table-row;
     }
 
-    .mbview_property-value {
+    .mapview_property-value {
       display: table-cell;
 
     }
 
-    .mbview_property-name {
+    .mapview_property-name {
       display: table-cell;
       padding-right: 10px;
     }
@@ -117,14 +117,14 @@ function displayValue(value) {
 }
 
 function renderProperty(propertyName, property) {
-  return '<div class="mbview_property">' +
-    '<div class="mbview_property-name">' + propertyName + '</div>' +
-    '<div class="mbview_property-value">' + displayValue(property) + '</div>' +
+  return '<div class="mapview_property">' +
+    '<div class="mapview_property-name">' + propertyName + '</div>' +
+    '<div class="mapview_property-value">' + displayValue(property) + '</div>' +
     '</div>';
 }
 
 function renderLayer(layerId) {
-  return '<div class="mbview_layer">' + layerId + '</div>';
+  return '<div class="mapview_layer">' + layerId + '</div>';
 }
 
 function renderProperties(feature) {
@@ -138,12 +138,12 @@ function renderProperties(feature) {
 
 function renderFeatures(features) {
   return features.map(function (ft) {
-    return '<div class="mbview_feature">' + renderProperties(ft) + '</div>';
+    return '<div class="mapview_feature">' + renderProperties(ft) + '</div>';
   }).join('');
 }
 
 function renderPopup(features) {
-  return '<div class="mbview_popup">' + renderFeatures(features) + '</div>';
+  return '<div class="mapview_popup">' + renderFeatures(features) + '</div>';
 }
 
 var popup = new mapboxgl.Popup({

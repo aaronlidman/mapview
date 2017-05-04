@@ -4,7 +4,7 @@ var objectAssign = require('object-assign');
 /**
  * Merge a configuration with tileset objects and
  * set 'smart' defaults based on these sources, e.g. center, zoom
- * @param {object} config passed to the mbview server
+ * @param {object} config passed to the mapview server
  * @param {array} tilesets of objects extracted from the mbtiles
  * @return {object} updated config object with sources appended
  */
@@ -27,7 +27,7 @@ module.exports.mergeConfigurations = function (config, tilesets) {
  */
 module.exports.usage = function () {
   var u = [];
-  u.push('usage: mbview [options] [files]');
+  u.push('usage: mapview [options] [files]');
   u.push('');
   u.push(' --port sets port to use (default: 3000)');
   u.push(' --quiet or -q supress all logging except the address to visit');
