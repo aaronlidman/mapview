@@ -7,7 +7,7 @@
   },
   "main": "server.js",
   "scripts": {
-    "lint": "eslint *.js test/",
+    "lint": "eslint *.js */*.js",
     "pretest": "npm run lint",
     "test": "tape test/*.test.js",
     "start": "node cli.js"

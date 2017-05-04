@@ -9,16 +9,16 @@ var objectAssign = require('object-assign');
  * @return {object} updated config object with sources appended
  */
 module.exports.mergeConfigurations = function (config, tilesets) {
-  var tilehash = tilesets.reduce(function (prev, curr) {
-    var c = {};
-    c[curr.basename] = curr;
-    return objectAssign({}, prev, c);
-  }, {});
-  var smart = objectAssign({}, config, tilesets[0]);
-  smart.zoom = smart.zoom || smart.center.pop();
-  return objectAssign({}, smart, {
-    sources: tilehash
-  });
+    var tilehash = tilesets.reduce(function (prev, curr) {
+        var c = {};
+        c[curr.basename] = curr;
+        return objectAssign({}, prev, c);
+    }, {});
+    var smart = objectAssign({}, config, tilesets[0]);
+    smart.zoom = smart.zoom || smart.center.pop();
+    return objectAssign({}, smart, {
+        sources: tilehash
+    });
 };
 
 /**
@@ -26,17 +26,17 @@ module.exports.mergeConfigurations = function (config, tilesets) {
  * @return {String} the instructions to run this thing
  */
 module.exports.usage = function () {
-  var u = [];
-  u.push('usage: mapview [options] [files]');
-  u.push('');
-  u.push(' --port sets port to use (default: 3000)');
-  u.push(' --quiet or -q supress all logging except the address to visit');
-  u.push(' -n don\'t automatically open the browser on start');
-  u.push(' --basemap, --base or --map sets the basemap style (default: dark)');
-  u.push(' --version returns module version');
-  u.push(' --help prints this message');
-  u.push('');
-  return u.join('\n');
+    var u = [];
+    u.push('usage: mapview [options] [files]');
+    u.push('');
+    u.push(' --port sets port to use (default: 3000)');
+    u.push(' --quiet or -q supress all logging except the address to visit');
+    u.push(' -n don\'t automatically open the browser on start');
+    u.push(' --basemap, --base or --map sets the basemap style (default: dark)');
+    u.push(' --version returns module version');
+    u.push(' --help prints this message');
+    u.push('');
+    return u.join('\n');
 };
 
 /**
@@ -44,6 +44,6 @@ module.exports.usage = function () {
  * @return {String} version number
  */
 module.exports.version = function () {
-  var data = fs.readFileSync(__dirname + '/package.json');
-  return JSON.parse(data).version;
+    var data = fs.readFileSync(__dirname + '/package.json');
+    return JSON.parse(data).version;
 };
