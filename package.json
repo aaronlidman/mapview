@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "View mbtiles locally",
   "bin": {
-    "mapview": "./cli.js"
+    "mapview": "./mapview-cli"
   },
   "main": "server.js",
   "scripts": {
