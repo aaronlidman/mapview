@@ -1,25 +1,4 @@
 var fs = require('fs');
-var objectAssign = require('object-assign');
-
-/**
- * Merge a configuration with tileset objects and
- * set 'smart' defaults based on these sources, e.g. center, zoom
- * @param {object} config passed to the mapview server
- * @param {array} tilesets of objects extracted from the mbtiles
- * @return {object} updated config object with sources appended
- */
-module.exports.mergeConfigurations = function (config, tilesets) {
-    var tilehash = tilesets.reduce(function (prev, curr) {
-        var c = {};
-        c[curr.basename] = curr;
-        return objectAssign({}, prev, c);
-    }, {});
-    var smart = objectAssign({}, config, tilesets[0]);
-    smart.zoom = smart.zoom || smart.center.pop();
-    return objectAssign({}, smart, {
-        sources: tilehash
-    });
-};
 
 /**
  * Get usage instructions

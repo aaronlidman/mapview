@@ -1,29 +1,38 @@
-/* eslint-disable no-console */
-
 var express = require('express');
 var app = express();
-var MBTiles = require('mbtiles');
+var mbtiles = require('@mapbox/mbtiles');
 var q = require('d3-queue').queue();
-var utils = require('./utils');
-var objectAssign = require('object-assign');
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
+function determineView(sources) {
+    // quick and dirty for now
+    // todo: properly confirm all sources have the same settings
+        // if they don't, create smart compromises
+        // if they do, return the shared settings
+    var firstSource = sources[Object.keys(sources)[0]];
+    return {
+        format: firstSource.format,
+        maxzoom: firstSource.maxzoom,
+        center: firstSource.center
+    };
+}
+
 module.exports = {
     loadTiles: function (file, callback) {
-        new MBTiles(file, function(err, tiles) {
+        new mbtiles(file, function(err, tiles) {
             if (err) throw err;
 
             tiles.getInfo(function (err, info) {
                 if (err) throw err;
 
-                var tileset = objectAssign({}, info, {
-                    tiles: tiles
-                });
+                for (var property in tiles) {
+                    info[property] = tiles[property];
+                }
 
-                callback(null, tileset);
+                callback(null, info);
             });
         });
     },
@@ -37,26 +46,33 @@ module.exports = {
 
         q.awaitAll(function (error, tilesets) {
             if (error) throw error;
-            var finalConfig = utils.mergeConfigurations(config, tilesets);
-            listen(finalConfig, callback);
+
+            config.sources = {};
+            tilesets.forEach(function (tileset) {
+                config.sources[tileset.basename] = tileset;
+            });
+
+            listen(config, callback);
         });
     },
     listen: function (config, onListen) {
-        var format = config.tiles._info.format;
+        var viewSettings = determineView(config.sources);
+        for (var setting in viewSettings) {
+            config[setting] = viewSettings[setting];
+        }
 
         app.get('/', function (req, res) {
-            if (format === 'pbf') {
+            if (config.format === 'pbf') {
                 res.render('vector', config);
             } else {
                 res.render('raster', config);
             }
         });
 
-        app.get('/:source/:z/:x/:y.' + format, function (req, res) {
-            var p = req.params;
-
-            var tiles = config.sources[p.source].tiles;
-            tiles.getTile(p.z, p.x, p.y, function (err, tile, headers) {
+        app.get('/:source/:z/:x/:y.' + config.format, function (req, res) {
+            var params = req.params;
+            var source = config.sources[params.source];
+            source.getTile(params.z, params.x, params.y, function (err, tile, headers) {
                 if (err) {
                     res.end();
                 } else {
