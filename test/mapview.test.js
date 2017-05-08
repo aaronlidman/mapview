@@ -77,7 +77,7 @@ test('serve', function (t) {
             .get('/baja-highways.mbtiles/14/2864/6624.pbf')
             .expect('Content-Type', 'application/x-protobuf')
             .end(function (err) {
-                t.error(err, 'serves protobufs for ' + source);
+                t.error(err, 'serves protobufs for baja-highways.mbtiles');
             });
 
         var source = Object.keys(config.sources)[2];
