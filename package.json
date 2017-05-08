@@ -7,7 +7,7 @@
   },
   "main": "server.js",
   "scripts": {
-    "lint": "eslint *.js */*.js",
+    "lint": "eslint *.js */*.js mapview-cli",
     "test": "tape test/*.js && npm run lint",
     "start": "node mapview-cli"
   },
@@ -38,7 +38,8 @@
     "extends": "mourner",
     "rules": {
         "no-new": "off",
-        "new-cap": "off"
+        "new-cap": "off",
+        "consistent-return": "off"
     }
   },
   "repository": {
