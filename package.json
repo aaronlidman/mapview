@@ -10,12 +10,14 @@
     "lint": "eslint *.js */*.js",
     "pretest": "npm run lint",
     "test": "tape test/*.test.js",
-    "start": "node cli.js"
+    "start": "node mapview-cli"
   },
   "keywords": [
-    "localhost",
-    "mapbox",
-    "mbtiles"
+    "mbtiles",
+    "map",
+    "maps",
+    "view",
+    "gl"
   ],
   "author": "",
   "license": "MIT",
@@ -27,7 +29,7 @@
   "dependencies": {
     "d3-queue": "^2.0.3",
     "ejs": "^2.4.1",
-    "express": "^4.13.4",
+    "express": "^4.14.0",
     "mbtiles": "^0.9.0",
     "minimist": "^1.2.0",
     "object-assign": "^4.1.0",
