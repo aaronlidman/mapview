@@ -1,0 +1,4 @@
+test:
+  override:
+    - rm -rf node_modules/ && nvm use 4 && npm install && npm test
+    - rm -rf node_modules/ && nvm use 5 && npm install && npm test

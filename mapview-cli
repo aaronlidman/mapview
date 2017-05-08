@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 /* eslint-disable no-console */
+'use strict';
+
+var fs = require('fs');
+var open = require('open');
+var utils = require('./lib/utils');
+var mapview = require('./lib/mapview');
 
 var argv = require('minimist')(process.argv.slice(2), {
     boolean: ['n', 'quiet', 'q']
 });
-var open = require('open');
-var fs = require('fs');
-var utils = require('./utils');
 
 var mbtiles = argv._;
 var accessToken = argv.MapboxAccessToken ||
@@ -14,25 +17,23 @@ var accessToken = argv.MapboxAccessToken ||
   process.env.MapboxAccessToken;
 
 if (argv.version || argv.v) {
-    console.log(utils.version());
-    process.exit(0);
+    return console.log(utils.version());
 } else if (!mbtiles.length) {
-    console.log(utils.usage());
-    process.exit(1);
+    return console.log(utils.usage());
 } else if (!accessToken) {
-    console.log('missing access token, try `export MAPBOX_ACCESS_TOKEN=...`');
-    process.exit(1);
+    throw (new Error('missing access token, try `export MAPBOX_ACCESS_TOKEN=...`'));
 }
 
 try {
-    mbtiles.forEach(function (f) { fs.statSync(f).isFile(); });
-} catch(e) {
+    mbtiles.forEach(function (f) {
+        fs.statSync(f).isFile();
+    });
+} catch (e) {
     return console.error(e);
 }
 
 argv.basemap = argv.basemap || argv.base || argv.map || 'dark';
 
-var mapview = require('./mapview');
 var params = {
     center: argv.center || [-122.42, 37.75],
     mbtiles: mbtiles,
@@ -44,6 +45,8 @@ var params = {
 };
 
 mapview.serve(params, function (err, config) {
-    console.log('Listening on http://localhost:' + config.port);
+    if (err) throw (new Error(err));
+
+    console.log('Serving on http://localhost:' + config.port);
     if (!argv.n) open('http://localhost:' + config.port);
 });
