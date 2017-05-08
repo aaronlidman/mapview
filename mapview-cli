@@ -6,7 +6,7 @@ var argv = require('minimist')(process.argv.slice(2), {
 });
 var open = require('open');
 var fs = require('fs');
-var utils = require('./utils');
+var utils = require('./lib/utils');
 
 var mbtiles = argv._;
 var accessToken = argv.MapboxAccessToken ||
@@ -32,7 +32,7 @@ try {
 
 argv.basemap = argv.basemap || argv.base || argv.map || 'dark';
 
-var mapview = require('./mapview');
+var mapview = require('./lib/mapview');
 var params = {
     center: argv.center || [-122.42, 37.75],
     mbtiles: mbtiles,
