@@ -1,3 +1,6 @@
+'use strict';
+
+var path = require('path');
 var mapview = require('../mapview');
 var request = require('supertest');
 var test = require('tape').test;
@@ -7,8 +10,10 @@ var server = null;
 test('loadTiles', function (t) {
     t.plan(6);
 
-    var mb = __dirname + '/../examples/baja-highways.mbtiles';
+    var mb = path.join(__dirname, '/../examples/baja-highways.mbtiles');
     mapview.loadTiles(mb, function (err, tileset) {
+        if (err) t.error(err);
+
         var center = [-117.037354, 32.537551, 14];
         var layers = tileset.vector_layers;
         t.deepEqual(tileset.center, center, 'sets center');
@@ -16,8 +21,10 @@ test('loadTiles', function (t) {
         t.equal(layers[0].id, 'bajahighways', 'tileset has one layer');
     });
 
-    mb = __dirname + '/fixtures/twolayers.mbtiles';
+    mb = path.join(__dirname, '/fixtures/twolayers.mbtiles');
     mapview.loadTiles(mb, function (err, tileset) {
+        if (err) t.error(err);
+
         var layers = tileset.vector_layers;
         t.true(tileset, 'loads tileset');
         t.equal(layers[0].id, 'hospitales', 'loads first layer');
@@ -31,9 +38,9 @@ test('serve', function (t) {
     var params = {
         basemap: 'dark',
         mbtiles: [
-            __dirname + '/../examples/baja-highways.mbtiles',
-            __dirname + '/fixtures/twolayers.mbtiles',
-            __dirname + '/fixtures/038.mbtiles'
+            path.join(__dirname, '/../examples/baja-highways.mbtiles'),
+            path.join(__dirname, '/fixtures/twolayers.mbtiles'),
+            path.join(__dirname, '/fixtures/038.mbtiles')
         ],
         port: 9000,
         accessToken: 'pk.foo.bar'
@@ -47,6 +54,8 @@ test('serve', function (t) {
             .get('/')
             .expect('Content-Type', 'text/html; charset=utf-8')
             .end(function (err, res) {
+                if (err) t.error(err);
+
                 var match = res.text.match(/bajahighways-lines/)[0];
                 t.true(match, 'loads a map with lines from first tileset');
                 match = res.text.match(/hospitales-pts/)[0];

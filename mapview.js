@@ -1,9 +1,12 @@
+'use strict';
+
+var path = require('path');
 var express = require('express');
 var app = express();
 var mbtiles = require('@mapbox/mbtiles');
 var q = require('d3-queue').queue();
 
-app.set('views', __dirname + '/views');
+app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
@@ -15,14 +18,14 @@ function determineView(sources) {
     var firstSource = sources[Object.keys(sources)[0]];
     return {
         format: firstSource.format,
-        maxzoom: firstSource.maxzoom,
+        zoom: firstSource.maxzoom,
         center: firstSource.center
     };
 }
 
 module.exports = {
     loadTiles: function (file, callback) {
-        new mbtiles(file, function(err, tiles) {
+        new mbtiles(file, function (err, tiles) {
             if (err) throw err;
 
             tiles.getInfo(function (err, info) {
