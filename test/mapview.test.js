@@ -10,7 +10,7 @@ var server = null;
 test('loadTiles', function (t) {
     t.plan(6);
 
-    var mb = path.join(__dirname, '/../examples/baja-highways.mbtiles');
+    var mb = path.join(__dirname, '/fixtures/baja-highways.mbtiles');
     mapview.loadTiles(mb, function (err, tileset) {
         if (err) t.error(err);
 
@@ -38,7 +38,7 @@ test('serve', function (t) {
     var params = {
         basemap: 'dark',
         mbtiles: [
-            path.join(__dirname, '/../examples/baja-highways.mbtiles'),
+            path.join(__dirname, '/fixtures/baja-highways.mbtiles'),
             path.join(__dirname, '/fixtures/twolayers.mbtiles'),
             path.join(__dirname, '/fixtures/038.mbtiles')
         ],
