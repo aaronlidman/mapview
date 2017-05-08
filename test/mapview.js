@@ -1,15 +1,14 @@
-var MBView = require('../mbview');
+var mapview = require('../mapview');
 var request = require('supertest');
 var test = require('tape').test;
 
 var server = null;
 
-test('MBView.loadTiles', function (t) {
+test('loadTiles', function (t) {
     t.plan(6);
 
     var mb = __dirname + '/../examples/baja-highways.mbtiles';
-
-    MBView.loadTiles(mb, function (err, tileset) {
+    mapview.loadTiles(mb, function (err, tileset) {
         var center = [-117.037354, 32.537551, 14];
         var layers = tileset.vector_layers;
         t.deepEqual(tileset.center, center, 'sets center');
@@ -18,7 +17,7 @@ test('MBView.loadTiles', function (t) {
     });
 
     mb = __dirname + '/fixtures/twolayers.mbtiles';
-    MBView.loadTiles(mb, function (err, tileset) {
+    mapview.loadTiles(mb, function (err, tileset) {
         var layers = tileset.vector_layers;
         t.true(tileset, 'loads tileset');
         t.equal(layers[0].id, 'hospitales', 'loads first layer');
@@ -26,7 +25,7 @@ test('MBView.loadTiles', function (t) {
     });
 });
 
-test('MBView.serve', function (t) {
+test('serve', function (t) {
     t.plan(8);
 
     var params = {
@@ -40,7 +39,7 @@ test('MBView.serve', function (t) {
         accessToken: 'pk.foo.bar'
     };
 
-    MBView.serve(params, function (err, config) {
+    mapview.serve(params, function (err, config) {
         t.error(err, 'should start server with no error');
         server = config.server;
 
