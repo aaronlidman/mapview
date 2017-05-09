@@ -8,44 +8,48 @@
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.34.0/mapbox-gl.css' rel='stylesheet' />
   <link href='https://www.mapbox.com/base/latest/base.css' rel='stylesheet' />
   <style>
-    body { margin:0; padding:0; }
-    #map { position:absolute; top:0; bottom:0; width:100%; }
+    body {
+        margin:0;
+        padding:0;
+    }
+    #map {
+        position: absolute;
+        top: 0px;
+        bottom: 0;
+        width: 100%;
+    }
     .mapview_popup {
       color: #333;
       display: table;
       font-family: "Open Sans", sans-serif;
       font-size: 10px;
     }
-
     .mapview_feature:not(:last-child) {
       border-bottom: 1px solid #ccc;
     }
-
-    .mapview_layer:before {
-      content: '#';
-    }
-
+    .mapview_layer:before { content: '#'; }
     .mapview_layer {
       display: block;
       font-weight: bold;
     }
-
-    .mapview_property {
-      display: table-row;
-    }
-
-    .mapview_property-value {
-      display: table-cell;
-
-    }
-
+    .mapview_property { display: table-row;}
+    .mapview_property-value { display: table-cell; }
     .mapview_property-name {
       display: table-cell;
       padding-right: 10px;
     }
+    #dragbar {
+        z-index: 999;
+        -webkit-app-region: drag;
+        height: 22px;
+        width: 100%;
+        position: absolute;
+        background-color: rgba(0,0,0,0.3);
+    }
   </style>
 </head>
 <body>
+<div id='dragbar'></div>
 
 <% include menu %>
 
