@@ -8,10 +8,7 @@ var mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        titleBarStyle: 'hidden',
-        title: 'mapview'
+        titleBarStyle: 'hidden'
     });
 
     mainWindow.loadURL('http://localhost:3000/');
