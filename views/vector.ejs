@@ -45,6 +45,7 @@
         width: 100%;
         position: absolute;
         background-color: rgba(0,0,0,0.3);
+        visibility: hidden;
     }
   </style>
 </head>
@@ -56,6 +57,10 @@
 <div id='map'></div>
 
 <script>
+
+if (window.navigator.userAgent.indexOf('mapview') > -1) {
+    document.querySelector('#dragbar').style.visibility = 'visible';
+}
 
 var center = [<%= center %>];
 center = [center[0], center[1]];
