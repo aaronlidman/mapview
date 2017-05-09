@@ -60,7 +60,7 @@
 
 <script>
 
-var settings = parseHash(window.location.hash);
+var settings = setSettings();
 window.onhashchange = hashChange;
 
 // determine if it was rendered within electron and if so show a titlebar for easy dragging
@@ -74,7 +74,7 @@ center = [center[0], center[1]];
 mapboxgl.accessToken = '<%= accessToken %>';
 var map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/mapbox/' + (settings.basemap || 'dark') + '-v9',
+  style: 'mapbox://styles/mapbox/' + settings.basemap + '-v9',
   center: center,
   zoom: <%= zoom %>,
   maxZoom: 30,
@@ -114,7 +114,7 @@ map.on('load', function () {
     map.addSource('<%= sid %>', {
       type: 'vector',
       tiles: [
-        'http://localhost:<%= port %>/<%= sid %>/{z}/{x}/{y}.pbf'
+        'http://localhost:' + window.location.port + '/<%= sid %>/{z}/{x}/{y}.pbf'
       ],
       maxzoom: <%= sources[sid].maxzoom %>
     });
@@ -124,10 +124,28 @@ map.on('load', function () {
   <% }); %>
 });
 
+function setSettings() {
+    var hashSettings = parseHash(window.location.hash);
+
+    var settings = {
+        basemap: hashSettings.basemap || 'dark'
+    };
+
+    var hash = '';
+    for (var setting in settings) {
+        hash = hash + '&' + setting + '=' + settings[setting];
+    }
+    hash = '#' + hash.slice(1);
+    window.location.hash = hash;
+
+    return settings;
+}
+
 function hashChange(event) {
     // just rerender everything for now
         // eventually intelligently diff and apply selective changes
-    map.setStyle('mapbox://styles/mapbox/' + (newHash.basemap || 'dark') + '-v9');
+    var settings = setSettings();
+    map.setStyle('mapbox://styles/mapbox/' + settings.basemap + '-v9');
 }
 
 function displayValue(value) {
