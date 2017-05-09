@@ -5,22 +5,24 @@
   "bin": {
     "mapview": "./mapview-cli"
   },
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
     "lint": "eslint *.js */*.js mapview-cli",
     "test": "tape test/*.js && npm run lint",
-    "start": "node mapview-cli"
+    "start": "electron ."
   },
   "keywords": [
     "mbtiles",
     "map",
     "maps",
     "view",
-    "gl"
+    "gl",
+    "electron"
   ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "electron": "^1.6.6",
     "eslint": "^2.13.1",
     "eslint-config-mourner": "^2.0.1",
     "supertest": "^1.2.0",
@@ -37,9 +39,9 @@
   "eslintConfig": {
     "extends": "mourner",
     "rules": {
-        "no-new": "off",
-        "new-cap": "off",
-        "consistent-return": "off"
+      "no-new": "off",
+      "new-cap": "off",
+      "consistent-return": "off"
     }
   },
   "repository": {
