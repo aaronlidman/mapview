@@ -12,7 +12,6 @@ function createWindow() {
     });
 
     mainWindow.loadURL('http://localhost:3000/');
-    mainWindow.webContents.openDevTools();
 
     // on window close throw everything away
     mainWindow.on('closed', function () {
