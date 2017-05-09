@@ -47,6 +47,8 @@
         background-color: rgba(0,0,0,0.3);
         visibility: hidden;
     }
+    .mapboxgl-ctrl-attrib { background-color: rgba(0,0,0,0.3) !important; }
+    .mapboxgl-ctrl-attrib a { color: rgba(255,255,255,1) !important; }
   </style>
 </head>
 <body>
@@ -72,8 +74,11 @@ var map = new mapboxgl.Map({
   center: center,
   zoom: <%= zoom %>,
   hash: true,
-  maxZoom: 30
-});
+  maxZoom: 30,
+  attributionControl: false
+}).addControl(new mapboxgl.AttributionControl({
+    compact: true
+}));
 
 var layers = {
   pts: [],
