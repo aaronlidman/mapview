@@ -6,11 +6,7 @@ var fs = require('fs');
 var open = require('open');
 var utils = require('./lib/utils');
 var mapview = require('./lib/mapview');
-
-var argv = require('minimist')(process.argv.slice(2), {
-    boolean: ['n', 'quiet', 'q']
-});
-
+var argv = require('minimist')(process.argv.slice(2));
 var mbtiles = argv._;
 var accessToken = argv.MapboxAccessToken ||
   process.env.MAPBOX_ACCESS_TOKEN ||
@@ -32,15 +28,9 @@ try {
     return console.error(e);
 }
 
-argv.basemap = argv.basemap || argv.base || argv.map || 'dark';
-
 var params = {
-    center: argv.center || [-122.42, 37.75],
     mbtiles: mbtiles,
-    port: argv.port || 3000,
-    zoom: 12,
-    quiet: argv.q || argv.quiet,
-    basemap: argv.basemap,
+    port: argv.port || 20009,
     accessToken: accessToken
 };
 
@@ -48,5 +38,5 @@ mapview.serve(params, function (err, config) {
     if (err) throw (new Error(err));
 
     console.log('Serving on http://localhost:' + config.port);
-    if (!argv.n) open('http://localhost:' + config.port);
+    open('http://localhost:' + config.port);
 });
