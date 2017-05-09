@@ -60,6 +60,10 @@
 
 <script>
 
+var settings = parseHash(window.location.hash);
+window.onhashchange = hashChange;
+
+// determine if it was rendered within electron and if so show a titlebar for easy dragging
 if (window.navigator.userAgent.indexOf('mapview') > -1) {
     document.querySelector('#dragbar').style.visibility = 'visible';
 }
@@ -70,10 +74,9 @@ center = [center[0], center[1]];
 mapboxgl.accessToken = '<%= accessToken %>';
 var map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/mapbox/<%= basemap %>-v9',
+  style: 'mapbox://styles/mapbox/' + (settings.basemap || 'dark') + '-v9',
   center: center,
   zoom: <%= zoom %>,
-  hash: true,
   maxZoom: 30,
   attributionControl: false
 }).addControl(new mapboxgl.AttributionControl({
@@ -121,6 +124,11 @@ map.on('load', function () {
   <% }); %>
 });
 
+function hashChange(event) {
+    // just rerender everything for now
+        // eventually intelligently diff and apply selective changes
+    map.setStyle('mapbox://styles/mapbox/' + (newHash.basemap || 'dark') + '-v9');
+}
 
 function displayValue(value) {
   if (typeof value === 'undefined' || value === null) return value;
@@ -158,6 +166,17 @@ function renderFeatures(features) {
 
 function renderPopup(features) {
   return '<div class="mapview_popup">' + renderFeatures(features) + '</div>';
+}
+
+function parseHash(hashString) {
+    if (!hashString) return {};
+    var hash = {};
+    var strings = (hashString[0] === '#' ? hashString.substr(1) : hashString).split('&');
+    for (var i = 0; i < strings.length; i++) {
+        var b = strings[i].split('=');
+        hash[decodeURIComponent(b[0])] = decodeURIComponent(b[1] || '');
+    }
+    return hash;
 }
 
 var popup = new mapboxgl.Popup({
