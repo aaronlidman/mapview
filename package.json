@@ -5,11 +5,12 @@
   "bin": {
     "mapview": "./mapview-cli"
   },
-  "main": "main.js",
+  "main": "./mapview-cli",
   "scripts": {
     "lint": "eslint *.js */*.js mapview-cli",
     "test": "tape test/*.js && npm run lint",
-    "start": "electron ."
+    "start": "electron .",
+    "package": "echo 'packaging up' && export npm_config_target=1.6.6 && export npm_config_arch=x64 && export npm_config_target_arc h=x64 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install"
   },
   "keywords": [
     "mbtiles",
@@ -19,20 +20,21 @@
     "gl",
     "electron"
   ],
-  "author": "",
+  "author": "Aaron Lidman <aaronlidman@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.6.6",
+    "electron": "1.6.6",
     "eslint": "^2.13.1",
     "eslint-config-mourner": "^2.0.1",
     "supertest": "^1.2.0",
     "tape": "^4.5.1"
   },
   "dependencies": {
+    "@mapbox/mbtiles": "^0.9.0",
     "d3-queue": "^2.0.3",
     "ejs": "^2.4.1",
+    "electron-log": "^2.2.4",
     "express": "^4.14.0",
-    "@mapbox/mbtiles": "^0.9.0",
     "minimist": "^1.2.0",
     "open": "0.0.5"
   },
@@ -44,6 +46,13 @@
       "consistent-return": "off"
     }
   },
+  "contributors": [
+    "Rodolfo Wilhelmy <rwilhelmy@gmail.com> (http://wilhel.me)",
+    "Nick Ingalls <nick@mapbox.com>",
+    "Eric Fischer <enf@pobox.com>",
+    "Andrew Harvey <andrew@alantgeo.com.au>",
+    "Lukas Martinelli <me@lukasmartinelli.ch>"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/aaronlidman/mapview.git"
