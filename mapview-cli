@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable no-console */
 'use strict';
 
 var fs = require('fs');
@@ -10,6 +9,7 @@ var argv = require('minimist')(process.argv.slice(2));
 var electron = require('electron');
 var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
+var log = require('electron-log');
 
 var mbtiles = argv._;
 
@@ -18,9 +18,9 @@ var accessToken = argv.MapboxAccessToken ||
   process.env.MapboxAccessToken;
 
 if (argv.version || argv.v) {
-    return console.log(utils.version());
+    return log.info(utils.version());
 } else if (!mbtiles.length) {
-    return console.log(utils.usage());
+    return log.info(utils.usage());
 } else if (!accessToken) {
     throw (new Error('missing access token, try `export MAPBOX_ACCESS_TOKEN=...`'));
 }
@@ -30,7 +30,7 @@ try {
         fs.statSync(f).isFile();
     });
 } catch (e) {
-    return console.error(e);
+    return log.error(e);
 }
 
 var params = {
@@ -70,5 +70,5 @@ app.on('activate', function () {
 
 mapview.serve(params, function (err, config) {
     if (err) throw (new Error(err));
-    console.log('Serving on http://localhost:' + config.port);
+    log.info('Serving on http://localhost:' + config.port);
 });
