@@ -1,7 +1,7 @@
 'use strict';
 
 var path = require('path');
-var mapview = require('../lib/mapview');
+var mapview = require('../app/server');
 var request = require('supertest');
 var test = require('tape').test;
 

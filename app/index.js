@@ -2,8 +2,8 @@
 'use strict';
 
 var fs = require('fs');
-var utils = require('./lib/utils');
-var mapview = require('./lib/mapview');
+var utils = require('./utils');
+var mapview = require('./server');
 var argv = require('minimist')(process.argv.slice(2));
 
 var electron = require('electron');
@@ -38,11 +38,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         titleBarStyle: 'hidden',
         show: false,
-        backgroundColor: '#000',
-        webPreferences: {
-            devTools: true,
-            nodeIntegration: false
-        }
+        backgroundColor: '#000'
     });
 
     mainWindow.loadURL('http://localhost:' + params.port + '/');
@@ -52,9 +48,7 @@ function createWindow() {
         mainWindow = null;
     });
 
-    mainWindow.once('ready-to-show', function () {
-        mainWindow.show();
-    });
+    mainWindow.once('ready-to-show', mainWindow.show);
 }
 
 app.on('ready', function () {

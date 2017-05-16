@@ -85,6 +85,14 @@ module.exports = {
             });
         });
 
+        // hook this up more
+        // app.get('/mapbox_access_token', function (req, res) {
+        //     res.end({
+        //         accessToken: process.env.MAPBOX_ACCESS_TOKEN ||
+        //             process.env.MapboxAccessToken || false
+        //     });
+        // });
+
         config.server = app.listen(config.port, function () {
             callback(null, config);
         });

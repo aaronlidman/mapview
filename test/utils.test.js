@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape').test;
-var utils = require('../lib/utils');
+var utils = require('../app/utils');
 
 test('usage', function (t) {
     var got = utils.usage();
