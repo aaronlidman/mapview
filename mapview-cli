@@ -7,22 +7,16 @@ var mapview = require('./lib/mapview');
 var argv = require('minimist')(process.argv.slice(2));
 
 var electron = require('electron');
+var log = require('electron-log');
 var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
-var log = require('electron-log');
 
 var mbtiles = argv._;
-
-var accessToken = argv.MapboxAccessToken ||
-  process.env.MAPBOX_ACCESS_TOKEN ||
-  process.env.MapboxAccessToken;
 
 if (argv.version || argv.v) {
     return log.info(utils.version());
 } else if (!mbtiles.length) {
     return log.info(utils.usage());
-} else if (!accessToken) {
-    throw (new Error('missing access token, try `export MAPBOX_ACCESS_TOKEN=...`'));
 }
 
 try {
@@ -35,15 +29,20 @@ try {
 
 var params = {
     mbtiles: mbtiles,
-    port: argv.port || 20009,
-    accessToken: accessToken
+    port: argv.port || 20009
 };
 
 var mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        titleBarStyle: 'hidden'
+        titleBarStyle: 'hidden',
+        show: false,
+        backgroundColor: '#000',
+        webPreferences: {
+            devTools: true,
+            nodeIntegration: false
+        }
     });
 
     mainWindow.loadURL('http://localhost:' + params.port + '/');
@@ -52,9 +51,19 @@ function createWindow() {
     mainWindow.on('closed', function () {
         mainWindow = null;
     });
+
+    mainWindow.once('ready-to-show', function () {
+        mainWindow.show();
+    });
 }
 
-app.on('ready', createWindow);
+app.on('ready', function () {
+    mapview.serve(params, function (err, config) {
+        if (err) return log.error(err);
+        createWindow();
+        log.info('Serving on http://localhost:' + config.port);
+    });
+});
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
@@ -66,9 +75,4 @@ app.on('activate', function () {
     if (mainWindow === null) {
         createWindow();
     }
-});
-
-mapview.serve(params, function (err, config) {
-    if (err) throw (new Error(err));
-    log.info('Serving on http://localhost:' + config.port);
 });
