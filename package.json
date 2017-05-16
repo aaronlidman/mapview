@@ -10,7 +10,8 @@
     "lint": "eslint *.js */*.js mapview-cli",
     "test": "tape test/*.js && npm run lint",
     "start": "electron .",
-    "package": "echo 'packaging up' && export npm_config_target=1.6.6 && export npm_config_arch=x64 && export npm_config_target_arc h=x64 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install"
+    "configure": "export npm_config_target=1.6.6 && export npm_config_arch=x64 && export npm_config_target_arc h=x64 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install",
+    "build": "npm run configure && electron-packager . Mapview --overwrite"
   },
   "keywords": [
     "mbtiles",
@@ -24,6 +25,7 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "1.6.6",
+    "electron-packager": "^8.7.0",
     "eslint": "^2.13.1",
     "eslint-config-mourner": "^2.0.1",
     "supertest": "^1.2.0",
