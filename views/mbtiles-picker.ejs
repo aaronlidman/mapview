@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>pick your mbtiles</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
+  <style>
+    html {
+      line-height: 1.4;
+    }
+
+    body {
+      background-color: white;
+      color: hsla(0,0%,0%,0.66);
+    }
+
+    #description {
+      background-color: #FFD659;
+    }
+
+    #dragbar {
+      -webkit-app-region: drag;
+      height: 22px;
+      visibility: hidden;
+    }
+
+    .muted {
+      color: hsla(0,0%,0%,0.33);
+    }
+
+    ul, li {
+      list-style-type: none;
+    }
+
+    .f1 {
+      font-size: 4rem;
+    }
+
+  </style>
+</head>
+<body class='helvetica'>
+  <div id='dragbar' class='w-100 absolute'></div>
+  <div id='description' class='fl w-50 vh-100 dt'>
+    <div class='dtc v-mid tc'>
+      <h1 class='ml3 white f1'>Pick a file</h1>
+    </div>
+  </div>
+
+  <div id='files' class='fl w-50'>
+    <div class='w-100 dt vh-100'>
+      <div class='dtc v-mid'>
+        <li class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
+          <div class='title black f3'>~/mapview/x.mbtiles</div>
+          <div class='details muted'>22.6 MB, 19 min ago</div>
+        </li>
+        <li class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
+          <div class='title black f3'>~/superlong/filename-length-name-so-long-yay.mbtiles</div>
+          <div class='details muted'>22.6 MB, 19 min ago</div>
+        </li>
+        <li class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
+          <div class='title black f3'>~/mapview/text/fixtures/short.mbtiles</div>
+          <div class='details muted'>22.6 MB, 19 min ago</div>
+        </li>
+        <li class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
+          <div class='title black f3'>~/mapview/text/fixtures/medium-length.mbtiles</div>
+          <div class='details muted'>22.6 MB, 19 min ago</div>
+        </li>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  // determine if it was rendered within electron and if so show a titlebar for easy dragging
+  if (window.navigator.userAgent.indexOf('mapview') > -1) {
+      document.querySelector('#dragbar').style.visibility = 'visible';
+  }
+</script>
+</html>
