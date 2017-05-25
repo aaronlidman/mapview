@@ -40,7 +40,9 @@ function createWindow() {
         show: false,
         backgroundColor: '#000',
         width: 1024,
-        height: 640
+        height: 640,
+        x: 0,
+        y: 0
     });
 
     mainWindow.loadURL('http://localhost:' + params.port + '/');
@@ -50,7 +52,10 @@ function createWindow() {
         mainWindow = null;
     });
 
-    mainWindow.once('ready-to-show', mainWindow.show);
+    mainWindow.once('ready-to-show', function () {
+        mainWindow.maximize();
+        mainWindow.show();
+    });
 }
 
 app.on('ready', function () {
