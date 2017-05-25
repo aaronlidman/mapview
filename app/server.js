@@ -5,6 +5,7 @@ var express = require('express');
 var app = express();
 var mbtiles = require('@mapbox/mbtiles');
 var q = require('d3-queue').queue();
+var log = require('electron-log');
 
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
@@ -26,10 +27,16 @@ function determineView(sources) {
 module.exports = {
     loadTiles: function (file, callback) {
         new mbtiles(file, function (err, tiles) {
-            if (err) throw err;
+            if (err) {
+                log.error(err);
+                throw err;
+            }
 
             tiles.getInfo(function (err, info) {
-                if (err) throw err;
+                if (err) {
+                    log.error(err);
+                    throw err;
+                }
 
                 for (var property in tiles) {
                     info[property] = tiles[property];
@@ -47,8 +54,11 @@ module.exports = {
             q.defer(loadTiles, file);
         });
 
-        q.awaitAll(function (error, tilesets) {
-            if (error) throw error;
+        q.awaitAll(function (err, tilesets) {
+            if (err) {
+                log.error(err);
+                throw err;
+            }
 
             config.sources = {};
             tilesets.forEach(function (tileset) {
@@ -77,6 +87,7 @@ module.exports = {
             var source = config.sources[params.source];
             source.getTile(params.z, params.x, params.y, function (err, tile, headers) {
                 if (err) {
+                    log.error(err);
                     res.end();
                 } else {
                     res.writeHead(200, headers);
