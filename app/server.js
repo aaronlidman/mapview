@@ -7,6 +7,8 @@ var mbtiles = require('@mapbox/mbtiles');
 var q = require('d3-queue').queue();
 var log = require('electron-log');
 
+var filescan = require('../lib/filescan');
+
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -22,6 +24,17 @@ function determineView(sources) {
         zoom: firstSource.maxzoom || 12,
         center: firstSource.center || [0, 0]
     };
+}
+
+function searchMbtiles(req, res) {
+    var dir = req.params.dir ? decodeURIComponent(req.params.dir) : '~/';
+    filescan(dir, function (err, files) {
+        if (err) {
+            log.error('ugh wtf');
+            return res.end(err);
+        }
+        res.send(files);
+    });
 }
 
 module.exports = {
@@ -95,6 +108,9 @@ module.exports = {
                 }
             });
         });
+
+        app.get('/mbtiles/:dir', searchMbtiles);
+        app.get('/mbtiles', searchMbtiles);
 
         // hook this up more
         // app.get('/mapbox_access_token', function (req, res) {
