@@ -6,6 +6,7 @@ var app = express();
 var mbtiles = require('@mapbox/mbtiles');
 var q = require('d3-queue').queue();
 var log = require('electron-log');
+var homedir = require('os').homedir();
 
 var filescan = require('../lib/filescan');
 
@@ -27,10 +28,10 @@ function determineView(sources) {
 }
 
 function searchMbtiles(req, res) {
-    var dir = req.params.dir ? decodeURIComponent(req.params.dir) : '~/';
+    var dir = req.params.dir ? decodeURIComponent(req.params.dir) : homedir;
     filescan(dir, function (err, files) {
         if (err) {
-            log.error('ugh wtf');
+            log.error(err);
             return res.end(err);
         }
         res.send(files);
