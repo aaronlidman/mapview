@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-var fs = require('fs');
-var utils = require('./utils');
-var mapview = require('./server');
+var server = require('./server');
 var argv = require('minimist')(process.argv.slice(2));
 
 var electron = require('electron');
@@ -11,24 +9,7 @@ var log = require('electron-log');
 var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
 
-var mbtiles = argv._;
-
-if (argv.version || argv.v) {
-    return log.info(utils.version());
-} else if (!mbtiles.length) {
-    return log.info(utils.usage());
-}
-
-try {
-    mbtiles.forEach(function (f) {
-        fs.statSync(f).isFile();
-    });
-} catch (e) {
-    return log.error(e);
-}
-
-var params = {
-    mbtiles: mbtiles,
+var config = {
     port: argv.port || 20009
 };
 
@@ -45,7 +26,7 @@ function createWindow() {
         y: 0
     });
 
-    mainWindow.loadURL('http://localhost:' + params.port + '/');
+    mainWindow.loadURL('http://localhost:' + config.port + '/index.html');
 
     // on window close throw everything away
     mainWindow.on('closed', function () {
@@ -59,7 +40,7 @@ function createWindow() {
 }
 
 app.on('ready', function () {
-    mapview.serve(params, function (err, config) {
+    server(config, function (err, config) {
         if (err) return log.error(err);
         createWindow();
         log.info('Serving on http://localhost:' + config.port);
