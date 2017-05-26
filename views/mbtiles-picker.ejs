@@ -5,6 +5,7 @@
   <title>pick your mbtiles</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
+  <script src="https://unpkg.com/vue"></script>
   <style>
     html {
       line-height: 1.4;
@@ -21,8 +22,9 @@
 
     #dragbar {
       -webkit-app-region: drag;
-      height: 22px;
+      height: 23px;
       visibility: hidden;
+      background-color: hsla(0,0%,0%,0.05);
     }
 
     .muted {
@@ -50,21 +52,9 @@
   <div id='files' class='fl w-50'>
     <div class='w-100 dt vh-100'>
       <div class='dtc v-mid'>
-        <li class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
-          <div class='title black f4'>~/mapview/x.mbtiles</div>
-          <div class='details muted'>22.6 MB, 19 min ago</div>
-        </li>
-        <li class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
-          <div class='title black f4'>~/superlong/filename-length-name-so-long-yay.mbtiles</div>
-          <div class='details muted'>22.6 MB, 19 min ago</div>
-        </li>
-        <li class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
-          <div class='title black f4'>~/mapview/text/fixtures/short.mbtiles</div>
-          <div class='details muted'>22.6 MB, 19 min ago</div>
-        </li>
-        <li class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
-          <div class='title black f4'>~/mapview/text/fixtures/medium-length.mbtiles</div>
-          <div class='details muted'>22.6 MB, 19 min ago</div>
+        <li v-for='file in files' class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
+          <div class='title f4 black'>{{ file.file }}</div>
+          <div class='details muted'>{{ file.size }}, {{ file.modified }}</div>
         </li>
       </div>
     </div>
@@ -75,5 +65,29 @@
   if (window.navigator.userAgent.indexOf('mapview') > -1) {
       document.querySelector('#dragbar').style.visibility = 'visible';
   }
+
+  function httpGet(theUrl, callback) {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.onreadystatechange = function () {
+          if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+              callback(xmlHttp.responseText);
+          }
+      };
+      xmlHttp.open('GET', theUrl, true);
+      xmlHttp.send(null);
+  }
+
+  httpGet('http://localhost:20009/mbtiles', function (response) {
+      console.log(JSON.parse(response));
+
+      var app = new Vue({
+          el: '#files',
+          data: {
+              files: JSON.parse(response)
+          }
+      });
+
+  });
+
 </script>
 </html>
