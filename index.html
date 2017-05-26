@@ -25,10 +25,11 @@
       height: 23px;
       visibility: hidden;
       background-color: hsla(0,0%,0%,0.05);
+      z-index: 999;
     }
 
     .muted {
-      color: hsla(0,0%,0%,0.33x);
+      color: hsla(0,0%,0%,0.33);
     }
 
     ul, li {
@@ -42,17 +43,17 @@
   </style>
 </head>
 <body class='helvetica'>
-  <div id='dragbar' class='w-100 absolute'></div>
-  <div id='description' class='fl w-50 vh-100 dt'>
+  <div id='dragbar' class='w-100 fixed'></div>
+  <div id='description' class='fixed left-0 w-50 vh-100 dt'>
     <div class='dtc v-mid tc'>
       <h1 class='ml3 white f1'>Pick a file</h1>
     </div>
   </div>
 
-  <div id='files' class='fl w-50'>
+  <div id='files' class='fr w-50'>
     <div class='w-100 dt vh-100'>
       <div class='dtc v-mid'>
-        <li v-for='file in files' class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
+        <li v-for='file in files' class='w-100 pl4 pr4 pa2 hover-bg-light-gray pointer'>
           <div class='title f4 black'>{{ file.file }}</div>
           <div class='details muted'>{{ file.size }}, {{ file.modified }}</div>
         </li>
