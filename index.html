@@ -1,94 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset='utf-8' />
-  <title>pick your mbtiles</title>
-  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-  <link rel="stylesheet" href="https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css"/>
-  <script src="https://unpkg.com/vue"></script>
-  <style>
-    html {
-      line-height: 1.4;
-    }
+    <head>
+        <meta charset='utf-8' />
+        <title>mbview</title>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <link rel='stylesheet' href='https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css'/>
+        <style type='text/css'>
+            body {
+                line-height: 1.4;
+                background-color: white;
+                color: hsla(0,0%,0%,0.66);
+            }
 
-    body {
-      background-color: white;
-      color: hsla(0,0%,0%,0.66);
-    }
+            #dragbar {
+                -webkit-app-region: drag;
+                height: 23px;
+                background-color: hsla(0,0%,0%,0.05);
+                z-index: 999;
+            }
 
-    #description {
-      background-color: #FFD659;
-    }
-
-    #dragbar {
-      -webkit-app-region: drag;
-      height: 23px;
-      visibility: hidden;
-      background-color: hsla(0,0%,0%,0.05);
-      z-index: 999;
-    }
-
-    .muted {
-      color: hsla(0,0%,0%,0.33);
-    }
-
-    ul, li {
-      list-style-type: none;
-    }
-
-    .f1 {
-      font-size: 4rem;
-    }
-
-  </style>
-</head>
-<body class='helvetica'>
-  <div id='dragbar' class='w-100 fixed'></div>
-  <div id='description' class='fixed left-0 w-50 vh-100 dt'>
-    <div class='dtc v-mid tc'>
-      <h1 class='ml3 white f1'>Pick a file</h1>
-    </div>
-  </div>
-
-  <div id='files' class='fr w-50'>
-    <div class='w-100 dt vh-100'>
-      <div class='dtc v-mid'>
-        <li v-for='file in files' class='w-100 pl4 pr4 pa2 hover-bg-light-gray pointer'>
-          <div class='title f4 black'>{{ file.file }}</div>
-          <div class='details muted'>{{ file.size }}, {{ file.modified }}</div>
-        </li>
-      </div>
-    </div>
-  </div>
-</body>
-<script>
-  // determine if it was rendered within electron and if so show a titlebar for easy dragging
-  if (window.navigator.userAgent.indexOf('mapview') > -1) {
-      document.querySelector('#dragbar').style.visibility = 'visible';
-  }
-
-  function httpGet(theUrl, callback) {
-      var xmlHttp = new XMLHttpRequest();
-      xmlHttp.onreadystatechange = function () {
-          if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-              callback(xmlHttp.responseText);
-          }
-      };
-      xmlHttp.open('GET', theUrl, true);
-      xmlHttp.send(null);
-  }
-
-  httpGet('http://localhost:20009/mbtiles', function (response) {
-      console.log(JSON.parse(response));
-
-      var app = new Vue({
-          el: '#files',
-          data: {
-              files: JSON.parse(response)
-          }
-      });
-
-  });
-
-</script>
+            ul, li {
+                list-style-type: none;
+            }
+        </style>
+    </head>
+    <body class='helvetica'>
+        <div id='app'>
+            <div v-if='electron' id='dragbar' class='w-100 fixed'></div>
+        </div>
+        <script src='dist/build.js'></script>
+    </body>
 </html>
