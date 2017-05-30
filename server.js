@@ -6,7 +6,7 @@ var app = express();
 var log = require('electron-log');
 var homedir = require('os').homedir();
 
-var filescan = require('./lib/filescan');
+var filescan = require('./src/server/filescan');
 
 app.use(express.static(path.join(__dirname, './')));
 
