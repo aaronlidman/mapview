@@ -15,6 +15,7 @@
             #dragbar {
                 -webkit-app-region: drag;
                 height: 23px;
+                visibility: hidden;
                 background-color: hsla(0,0%,0%,0.05);
                 z-index: 999;
             }
@@ -26,7 +27,10 @@
     </head>
     <body class='helvetica'>
         <div id='app'>
-            <div v-if='electron' id='dragbar' class='w-100 fixed'></div>
+            <div id='dragbar' class='w-100 fixed'></div>
+            <transition name='fade' mode='out-in'>
+                <router-view class='view'></router-view>
+            </transition>
         </div>
         <script src='dist/build.js'></script>
     </body>
