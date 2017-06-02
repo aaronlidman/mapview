@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class='bg-green fixed w-50 vh-100 dt'>
+    <div class='bg-lime fixed w-50 vh-100 dt'>
         <div class='dtc v-mid'>
             <h1 class='mb5 white f1 ttu tc'>Pick</h1>
         </div>
@@ -25,6 +25,10 @@
 
 #file-list li:last-child {
     border-bottom: none;
+}
+
+.bg-lime {
+    background-color: hsla(90, 70%, 55%, 1);
 }
 </style>
 
