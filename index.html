@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset='utf-8' />
-        <title>mbview</title>
+        <title>mapview</title>
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
         <link rel='stylesheet' href='https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css'/>
         <style type='text/css'>
@@ -10,15 +10,6 @@
                 line-height: 1.4;
                 background-color: white;
             }
-
-            #dragbar {
-                -webkit-app-region: drag;
-                height: 23px;
-                visibility: hidden;
-                background-color: hsla(0,0%,0%,0.05);
-                z-index: 999;
-            }
-
             ul, li {
                 list-style-type: none;
             }
@@ -28,16 +19,11 @@
                 overflow-wrap: break-word;
                 word-break: break-word;
             }
-
-            .hover-bg-light-gray:hover,
-            .hover-bg-light-gray:focus: {
-                background-color: #f8f8f8;
-            }
         </style>
     </head>
-    <body class='helvetica black-80'>
+    <body class='helvetica black-70'>
         <div id='app'>
-            <div id='dragbar' class='w-100 fixed'></div>
+            <dragbar v-if='electronWindow'></dragbar>
             <transition name='fade' mode='out-in'>
                 <router-view class='view'></router-view>
             </transition>

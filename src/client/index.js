@@ -3,9 +3,11 @@
 var Vue = require('vue');
 var Router = require('vue-router');
 var log = require('electron-log');
-var request = require('request');
 
+var dragbar = require('../components/dragbar.vue');
 var picker = require('../components/picker.vue');
+
+Vue.component('dragbar', dragbar);
 
 Vue.use(Router);
 
@@ -17,5 +19,8 @@ var router = new Router({
 });
 
 var app = new Vue({
-    router: router
+    router: router,
+    data: {
+        electronWindow: window.navigator.userAgent.indexOf('mapview') > -1
+    }
 }).$mount('#app');
