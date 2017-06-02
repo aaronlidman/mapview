@@ -5,8 +5,8 @@
             <h1 class='mb5 white f1 ttu tc rotate-270'>Pick</h1>
         </div>
     </div>
-    <div v-show='!loading' class='fr w-auto'>
-        <div class='w-100 dt vh-100'>
+    <div id='file-list' v-show='!loading'>
+        <div class='dt vh-100 center'>
             <div class='dtc v-mid'>
                 <li v-for='file in files' class='w-100 pl4 pr4 pa2 hover-bg-light-gray pointer'>
                     <div class='title f4 black'>{{ file.file }}</div>
