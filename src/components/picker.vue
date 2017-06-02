@@ -1,14 +1,14 @@
 <template>
 <div>
-    <div id='description' class='bg-green fixed w-50 vh-100 dt'>
+    <div class='bg-green fixed w-50 vh-100 dt'>
         <div class='dtc v-mid'>
             <h1 class='mb5 white f1 ttu tc'>Pick</h1>
         </div>
     </div>
-    <div id='file-list' class='w-50 fr bg-white' v-show='!loading'>
+    <div id='file-list' class='pl4 pr4 w-50 fr bg-white' v-show='!loading'>
         <div class='dt vh-100'>
             <div class='dtc v-mid'>
-                <li v-for='file in files' class='w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
+                <li v-for='file in files' class='bb b--near-white w-100 pa3 hover-bg-near-white pointer'>
                     <div class='f4 breaky'>{{ file.file }}</div>
                     <div class='black-40'>{{ file.size }}, {{ file.modified }}</div>
                 </li>
@@ -19,12 +19,12 @@
 </template>
 
 <style>
-#description {
-    /*background-color: #FFD659;*/
-}
-
 .f1 {
     font-size: 6rem;
+}
+
+#file-list li:last-child {
+    border-bottom: none;
 }
 </style>
 
