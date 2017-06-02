@@ -42,7 +42,8 @@
     "open": "0.0.5",
     "request": "^2.81.0",
     "tildify": "^1.2.0",
-    "vue": "^2.3.3"
+    "vue": "^2.3.3",
+    "vue-router": "^2.5.3"
   },
   "browser": {
     "vue": "vue/dist/vue.common.js"

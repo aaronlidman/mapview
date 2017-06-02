@@ -26,7 +26,7 @@ function createWindow() {
         y: 0
     });
 
-    mainWindow.loadURL('http://localhost:' + config.port + '/index.html');
+    mainWindow.loadURL('http://localhost:' + config.port);
 
     // on window close throw everything away
     mainWindow.on('closed', function () {
