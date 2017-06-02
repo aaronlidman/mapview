@@ -9,8 +9,8 @@
         <div class='dt vh-100'>
             <div class='dtc v-mid'>
                 <li v-for='file in files' class='bb b--near-white w-100 pa3 hover-bg-near-white pointer'>
-                    <div class='f4 breaky'>{{ file.file }}</div>
-                    <div class='black-40'>{{ file.size }}, {{ file.modified }}</div>
+                    <div class='breaky'>{{ file.file }}</div>
+                    <div class='black-30'>{{ file.size }}, {{ file.modified }}</div>
                 </li>
             </div>
         </div>
@@ -19,6 +19,12 @@
 </template>
 
 <style>
+.breaky {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
 .f1 {
     font-size: 6rem;
 }
