@@ -9,7 +9,6 @@
             body {
                 line-height: 1.4;
                 background-color: white;
-                color: hsla(0,0%,0%,0.66);
             }
 
             #dragbar {
@@ -23,9 +22,20 @@
             ul, li {
                 list-style-type: none;
             }
+
+            .breaky {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                word-break: break-word;
+            }
+
+            .hover-bg-light-gray:hover,
+            .hover-bg-light-gray:focus: {
+                background-color: #f8f8f8;
+            }
         </style>
     </head>
-    <body class='helvetica'>
+    <body class='helvetica black-80'>
         <div id='app'>
             <div id='dragbar' class='w-100 fixed'></div>
             <transition name='fade' mode='out-in'>

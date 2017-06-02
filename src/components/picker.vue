@@ -1,16 +1,16 @@
 <template>
 <div>
-    <div id='description' class='fixed left-0 w-auto vh-100 dt'>
-        <div class='dtc v-btm'>
-            <h1 class='mb5 white f1 ttu tc rotate-270'>Pick</h1>
+    <div id='description' class='bg-green fixed w-50 vh-100 dt'>
+        <div class='dtc v-mid'>
+            <h1 class='mb5 white f1 ttu tc'>Pick</h1>
         </div>
     </div>
-    <div id='file-list' v-show='!loading'>
-        <div class='dt vh-100 center'>
+    <div id='file-list' class='w-50 fr bg-white' v-show='!loading'>
+        <div class='dt vh-100'>
             <div class='dtc v-mid'>
-                <li v-for='file in files' class='w-100 pl4 pr4 pa2 hover-bg-light-gray pointer'>
-                    <div class='title f4 black'>{{ file.file }}</div>
-                    <div class='details muted'>{{ file.size }}, {{ file.modified }}</div>
+                <li v-for='file in files' class='b--light-gray bb w-100 pl4 pr4 pa3 hover-bg-light-gray pointer'>
+                    <div class='f4 breaky'>{{ file.file }}</div>
+                    <div class='black-40'>{{ file.size }}, {{ file.modified }}</div>
                 </li>
             </div>
         </div>
@@ -20,15 +20,11 @@
 
 <style>
 #description {
-        background-color: #FFD659;
-}
-
-.muted {
-        color: hsla(0,0%,0%,0.33);
+    /*background-color: #FFD659;*/
 }
 
 .f1 {
-        font-size: 4rem;
+    font-size: 6rem;
 }
 </style>
 
