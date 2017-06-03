@@ -35,7 +35,12 @@ function createWindow() {
 
     mainWindow.once('ready-to-show', function () {
         mainWindow.maximize();
-        mainWindow.show();
+
+        if (process.env.NODE_ENV && process.env.NODE_ENV === 'dev') {
+            mainWindow.webContents.openDevTools();
+        } else {
+            mainWindow.show();
+        }
     });
 }
 
@@ -56,5 +61,9 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
     if (mainWindow === null) {
         createWindow();
+    }
+
+    if (process.env.NODE_ENV && process.env.NODE_ENV === 'dev') {
+        mainWindow.show();
     }
 });
