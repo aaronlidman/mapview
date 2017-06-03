@@ -8,7 +8,7 @@
     <div id='file-list' class='pl4 pr4 w-50 fr bg-white' v-show='!loading'>
         <div class='dt vh-100'>
             <div class='dtc v-mid'>
-                <li v-for='file in files' class='bb b--near-white w-100 pa3 hover-bg-near-white pointer'>
+                <li v-for='file in files' class='w-100 pa3 hover-bg-near-white pointer'>
                     <div class='breaky'>{{ file.file }}</div>
                     <div class='black-30'>{{ file.size }}, {{ file.modified }}</div>
                 </li>
