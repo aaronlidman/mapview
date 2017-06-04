@@ -7,6 +7,7 @@ var log = require('electron-log');
 var filesize = require('filesize');
 var moment = require('moment');
 var tildify = require('tildify');
+var MBTiles = require('mbtiles-offline');
 
 module.exports = function (directory, callback) {
     var q = queue(10);
@@ -45,13 +46,16 @@ module.exports = function (directory, callback) {
 };
 
 function statFile(file, cb) {
-    fs.stat(file, function (err, stats) {
-        if (err) return cb(err);
-        cb(null, {
-            file: tildify(file) || stats.isFile(),
-            title: undefined,
-            size: filesize(stats.size),
-            modified: new Date(stats.mtime)
+    var mbtiles = new MBTiles(file);
+    // yeah I know :/
+    mbtiles.metadata().then(function (metadata) {
+        fs.stat(file, function (err, stats) {
+            if (err) return cb(err);
+            // add a few more useful properties
+            metadata.file = tildify(file) || stats.isFile();
+            metadata.size = filesize(stats.size);
+            metadata.modified = new Date(stats.mtime);
+            cb(null, metadata);
         });
     });
 }
