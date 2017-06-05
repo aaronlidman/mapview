@@ -6,6 +6,7 @@ var log = require('electron-log');
 
 var dragbar = require('../components/dragbar.vue');
 var picker = require('../components/picker.vue');
+var map = require('../components/map.vue');
 
 Vue.component('dragbar', dragbar);
 
@@ -14,7 +15,8 @@ Vue.use(Router);
 var router = new Router({
     mode: 'history',
     routes: [
-        {path: '/', component: picker}
+        {path: '/', component: picker},
+        {path: '/map', component: map}
     ]
 });
 
