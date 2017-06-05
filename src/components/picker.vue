@@ -6,7 +6,7 @@
         </div>
     </div>
     <div id='file-list' class='pl4 pr4 w-50 fr bg-white' v-show='!loading'>
-        <div class='dt vh-100'>
+        <div class='dt vh-100 center'>
             <div class='dtc v-mid'>
                 <li v-for='file in files' class='w-100 pa3 hover-bg-near-white pointer'>
                     <div>{{ file.basename }} <span class='black-30 breaky'>in {{ file.dir }}</span></div>
@@ -27,10 +27,6 @@
 
 .f1 {
     font-size: 6rem;
-}
-
-#file-list li:last-child {
-    border-bottom: none;
 }
 
 .bg-lime {
