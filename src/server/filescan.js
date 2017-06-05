@@ -53,7 +53,7 @@ function statFile(file, cb) {
         fs.stat(file, function (err, stats) {
             if (err) return cb(err);
             // add a few more useful properties
-            metadata.path = tildify(file) || stats.isFile();
+            metadata.path = tildify(file);
             metadata.basename = path.basename(file);
             metadata.dir = tildify(path.dirname(file));
             metadata.size = filesize(stats.size);

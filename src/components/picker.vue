@@ -8,7 +8,7 @@
     <div id='file-list' class='pl4 pr4 w-50 fr bg-white' v-show='!loading'>
         <div class='dt vh-100 center'>
             <div class='dtc v-mid'>
-                <li v-for='file in files' class='w-100 pa3 hover-bg-near-white pointer'>
+                <li v-for='file in files' :key='file.path' @click.once='selectFile(file.path)' class='w-100 pa3 hover-bg-near-white pointer'>
                     <div>{{ file.basename }} <span class='black-30 breaky'>in {{ file.dir }}</span></div>
                     <div class='black-30'>{{ file.size }}, {{ file.modified }}</div>
                 </li>
@@ -61,6 +61,14 @@ module.exports = {
             request('http://localhost:20009/mbtiles/', function(err, resp, body) {
                 that.loading = false;
                 that.files = JSON.parse(body);
+            });
+        },
+        selectFile: function(filePath) {
+            this.$router.push({
+                path: 'vector',
+                query: {
+                    file: filePath
+                }
             });
         }
     }
