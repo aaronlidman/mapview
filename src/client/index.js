@@ -13,7 +13,6 @@ Vue.component('dragbar', dragbar);
 Vue.use(Router);
 
 var router = new Router({
-    mode: 'history',
     routes: [
         {path: '/', component: picker},
         {path: '/map', component: map}
