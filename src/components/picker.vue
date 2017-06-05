@@ -9,7 +9,7 @@
         <div class='dt vh-100'>
             <div class='dtc v-mid'>
                 <li v-for='file in files' class='w-100 pa3 hover-bg-near-white pointer'>
-                    <div class='breaky'>{{ file.file }}</div>
+                    <div>{{ file.basename }} <span class='black-30 breaky'>in {{ file.dir }}</span></div>
                     <div class='black-30'>{{ file.size }}, {{ file.modified }}</div>
                 </li>
             </div>

@@ -1,6 +1,7 @@
 'use strict';
 
 var fs = require('fs');
+var path = require('path');
 var exec = require('child_process').exec;
 var queue = require('d3-queue').queue;
 var log = require('electron-log');
@@ -52,7 +53,9 @@ function statFile(file, cb) {
         fs.stat(file, function (err, stats) {
             if (err) return cb(err);
             // add a few more useful properties
-            metadata.file = tildify(file) || stats.isFile();
+            metadata.path = tildify(file) || stats.isFile();
+            metadata.basename = path.basename(file);
+            metadata.dir = tildify(path.dirname(file));
             metadata.size = filesize(stats.size);
             metadata.modified = new Date(stats.mtime);
             cb(null, metadata);
