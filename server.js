@@ -1,9 +1,13 @@
 'use strict';
 
+var fs = require('fs');
+var path = require('path');
 var express = require('express');
 var app = express();
 var log = require('electron-log');
 var homedir = require('os').homedir();
+
+app.use(express.static(path.join(__dirname, './')));
 
 var file = require('./src/server/file');
 
@@ -24,7 +28,7 @@ function getMetadata(req, res) {
             log.error(err);
             return res.end(err);
         }
-        res.sent(JSON.stringify(metadata));
+        res.send(JSON.stringify(metadata));
     });
 }
 

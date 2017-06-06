@@ -46,8 +46,11 @@ module.exports = {
             });
         });
     },
-    metadata: function () {
-
+    metadata: function (file, cb) {
+        var mbtiles = new MBTiles(decodeURIComponent(file));
+        mbtiles.metadata().then(function (metadata) {
+            cb(null, metadata);
+        });
     }
 };
 
