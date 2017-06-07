@@ -1,5 +1,6 @@
 'use strict';
 
+var fs = require('fs');
 var path = require('path');
 var express = require('express');
 var app = express();
@@ -36,22 +37,24 @@ function getMetadata(req, res) {
 
 function getTile(req, res) {
     var p = req.params;
-    if (!loadedTiles[p.source]) {
-        loadedTiles[p.source] = new MBTiles(decodeURIComponent(p.source));
+    var file = decodeURIComponent(p.source);
+    if (!loadedTiles[file]) {
+        loadedTiles[file] = new MBTiles(decodeURIComponent(file));
+        loadedTiles[file].stats = fs.statSync(decodeURIComponent(file));
     }
 
-    loadedTiles[p.source].findOne([p.x, p.y, p.z].map(Number))
+    loadedTiles[file].findOne([p.x, p.y, p.z].map(Number))
         .then(function (tile) {
             if (!tile) {
                 res.writeHead(204);
                 return res.end();
             }
             var headers = tiletype.headers(tile);
+            headers['Last-Modified'] = new Date(loadedTiles[file].stats.mtime).toUTCString();
             res.writeHead(200, headers);
             res.end(tile);
         })
         .catch(function (err) {
-            console.log(err);
             log.error(err);
             res.end();
         });
