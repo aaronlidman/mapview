@@ -35,6 +35,7 @@
     "vueify": "^9.4.1"
   },
   "dependencies": {
+    "@mapbox/tiletype": "^0.3.1",
     "d3-queue": "^3.0.7",
     "electron-log": "^2.2.4",
     "express": "^4.14.0",
