@@ -25,9 +25,10 @@ module.exports = {
             loadMap();
         });
 
-        function createStyle(layers, sourceId) {
+        function addLayers(layers, sourceId) {
+            console.log('in addLayers', map);
             layers.forEach(function (layer) {
-                var polygons = {
+                map.addLayer({
                     id: layer.id + '-polygons',
                     type: 'fill',
                     source: sourceId,
@@ -38,9 +39,9 @@ module.exports = {
                         'fill-opacity': 0.1,
                         'fill-color': '#00FF00'
                     }
-                };
+                });
 
-                var polygonOutlines = {
+                map.addLayer({
                     id: layer.id + '-polygon-outlines',
                     type: 'line',
                     source: sourceId,
@@ -55,9 +56,9 @@ module.exports = {
                         'line-width': 1,
                         'line-opacity': 0.75
                     }
-                };
+                });
 
-                var lines = {
+                map.addLayer({
                     id: layer.id + '-lines',
                     type: 'line',
                     source: sourceId,
@@ -72,9 +73,9 @@ module.exports = {
                         'line-width': 1,
                         'line-opacity': 0.75
                     }
-                };
+                });
 
-                var points = {
+                map.addLayer({
                     id: layer.id + '-points',
                     type: 'circle',
                     source: sourceId,
@@ -85,18 +86,30 @@ module.exports = {
                         'circle-radius': 2.5,
                         'circle-opacity': 0.75
                     }
-                };
-
+                });
             });
         }
 
         function loadMap() {
             map = new mapboxgl.Map({
                 container: 'map',
-                maxZoom: 30
+                maxZoom: 30,
+                style: 'mapbox://styles/mapbox/streets-v9'
             });
 
-            map.setStyle('mapbox://styles/mapbox/streets-v9');
+            // todo: unmount unused mbtiles
+                // how big of a problem is this? is it real or significant?
+
+            map.on('load', function () {
+                map.addSource('testSource', {
+                    type: 'vector',
+                    tiles: ['http://localhost:20009/' + encodeURIComponent(file) + '/{z}/{x}/{y}.pbf'],
+                    maxzoom: metadata.maxzoom
+                });
+
+                addLayers(JSON.parse(metadata.json).vector_layers, 'testSource');
+            });
+
         }
     },
     data: function () {
