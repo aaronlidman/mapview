@@ -1,6 +1,7 @@
 <template>
 <div>
     <div id='map' class='w-100 vh-100'></div>
+    <!-- todo: set a cool title -->
     <h1 id='title'></h1>
 </div>
 </template>
@@ -10,106 +11,28 @@ var mapboxgl = require('mapbox-gl');
 var qs = require('query-string');
 var request = require('request');
 var log = require('electron-log');
+var mapStyle = require('../client/mapStyle');
 
 module.exports = {
     mounted: function () {
         var hash = qs.parse(window.location.hash);
-        var file = hash['/map?file'];
+        var filepath = hash['/map?file'];
         var map, metadata;
 
         mapboxgl.accessToken = '';
 
-        request('http://localhost:20009/metadata/' + encodeURIComponent(file), function (err, resp, body) {
+        request('http://localhost:20009/metadata/' + encodeURIComponent(filepath), function (err, resp, body) {
             if (err) return log.error(err);
             metadata = JSON.parse(body);
             loadMap();
         });
 
-        function addLayers(layers, sourceId) {
-            console.log('in addLayers', map);
-            layers.forEach(function (layer) {
-                map.addLayer({
-                    id: layer.id + '-polygons',
-                    type: 'fill',
-                    source: sourceId,
-                    'source-layer': layer.id,
-                    filter: ['==', '$type', 'Polygon'],
-                    layout: {},
-                    paint: {
-                        'fill-opacity': 0.1,
-                        'fill-color': '#00FF00'
-                    }
-                });
-
-                map.addLayer({
-                    id: layer.id + '-polygon-outlines',
-                    type: 'line',
-                    source: sourceId,
-                    'source-layer': layer.id,
-                    filter: ['==', '$type', 'Polygon'],
-                    layout: {
-                        'line-join': 'round',
-                        'line-cap': 'round'
-                    },
-                    paint: {
-                        'line-color': '#00FF00',
-                        'line-width': 1,
-                        'line-opacity': 0.75
-                    }
-                });
-
-                map.addLayer({
-                    id: layer.id + '-lines',
-                    type: 'line',
-                    source: sourceId,
-                    'source-layer': layer.id,
-                    filter: ['==', '$type', 'LineString'],
-                    layout: {
-                        'line-join': 'round',
-                        'line-cap': 'round'
-                    },
-                    paint: {
-                        'line-color': '#00FF00',
-                        'line-width': 1,
-                        'line-opacity': 0.75
-                    }
-                });
-
-                map.addLayer({
-                    id: layer.id + '-points',
-                    type: 'circle',
-                    source: sourceId,
-                    'source-layer': layer.id,
-                    filter: ['==', '$type', 'Point'],
-                    paint: {
-                        'circle-color': '#00FF00',
-                        'circle-radius': 2.5,
-                        'circle-opacity': 0.75
-                    }
-                });
-            });
-        }
-
         function loadMap() {
             map = new mapboxgl.Map({
                 container: 'map',
                 maxZoom: 30,
-                style: 'mapbox://styles/mapbox/streets-v9'
+                style: mapStyle(filepath, metadata)
             });
-
-            // todo: unmount unused mbtiles
-                // how big of a problem is this? is it real or significant?
-
-            map.on('load', function () {
-                map.addSource('testSource', {
-                    type: 'vector',
-                    tiles: ['http://localhost:20009/' + encodeURIComponent(file) + '/{z}/{x}/{y}.pbf'],
-                    maxzoom: metadata.maxzoom
-                });
-
-                addLayers(JSON.parse(metadata.json).vector_layers, 'testSource');
-            });
-
         }
     },
     data: function () {
@@ -119,6 +42,3 @@ module.exports = {
 </script>
 
 <style src='../../node_modules/mapbox-gl/dist/mapbox-gl.css'></style>
-<style>
-
-</style>
