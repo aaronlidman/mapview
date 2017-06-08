@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div id='map' class='w-100 vh-100'></div>
+    <div id='map' class='bg-near-black w-100 vh-100'></div>
     <!-- todo: set a cool title -->
     <h1 id='title'></h1>
 </div>
