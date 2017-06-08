@@ -1,11 +1,11 @@
 <template>
 <div>
-    <div class='bg-lime fixed w-50 vh-100 dt'>
+    <div class='bg-blue fixed w-50 vh-100 dt'>
         <div class='dtc v-mid'>
             <h1 class='mb5 white f1 ttu tc'>Pick</h1>
         </div>
     </div>
-    <div id='file-list' class='pl4 pr4 w-50 fr bg-white' v-show='!loading'>
+    <div id='file-list' class='pa4 w-50 fr bg-white' v-show='!loading'>
         <div class='dt vh-100 center'>
             <div class='dtc v-mid'>
                 <li v-for='file in files' :key='file.path' @click.once='selectFile(file.path, file.format)' class='w-100 pa3 hover-bg-near-white pointer'>
