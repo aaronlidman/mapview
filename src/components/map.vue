@@ -19,21 +19,20 @@ module.exports = {
         var filepath = hash['/map?file'];
         var map, metadata;
 
+        console.log('filezPath', this.filezPath);
+        console.log('filez', this.filez);
+
         mapboxgl.accessToken = '';
 
         request('http://localhost:20009/metadata/' + encodeURIComponent(filepath), function (err, resp, body) {
             if (err) return log.error(err);
             metadata = JSON.parse(body);
-            loadMap();
-        });
-
-        function loadMap() {
             map = new mapboxgl.Map({
                 container: 'map',
                 maxZoom: 30,
                 style: mapStyle(filepath, metadata)
             });
-        }
+        });
     },
     data: function () {
         return {};
