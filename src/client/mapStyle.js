@@ -1,9 +1,8 @@
 var darkColors = [
-    '#000000',
-    '#111111',
-    '#222222',
-    '#001326',
-    '#002609'
+    '#000000',  // black
+    '#111111',  // dark gray
+    '#001326',  // dark blue
+    '#002609'   // dark green
 ];
 
 var lightColors = [
@@ -26,7 +25,7 @@ function random(min, max) {
 
 module.exports = function (filepath, metadata) {
     var vectorLayers = JSON.parse(metadata.json).vector_layers;
-    var source = encodeURIComponent(filepath);
+    var source = filepath;
     var styleLayers = [];
 
     vectorLayers.forEach(function (layer) {
