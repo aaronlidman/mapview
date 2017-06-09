@@ -13,11 +13,20 @@
             ul, li {
                 list-style-type: none;
             }
+            .drag {
+                -webkit-app-region: drag;
+            }
+            .no-drag{
+                --webkit-app-region: no-drag;
+            }
+            #dragbar {
+                height: 20px;
+            }
         </style>
     </head>
-    <body class='helvetica black-70'>
+    <body class='helvetica black-70 bg-light-gray'>
+        <div class='drag fixed top-0 w-100 z-max' id='dragbar'></div>
         <div id='app'>
-            <dragbar v-if='electronWindow'></dragbar>
             <transition name='fade' mode='out-in'>
                 <router-view class='view'></router-view>
             </transition>
