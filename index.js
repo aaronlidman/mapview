@@ -21,9 +21,7 @@ function createWindow() {
         show: false,
         backgroundColor: '#000',
         width: 1024,
-        height: 640,
-        x: 0,
-        y: 0
+        height: 640
     });
 
     mainWindow.loadURL('http://localhost:' + config.port);
@@ -34,8 +32,6 @@ function createWindow() {
     });
 
     mainWindow.once('ready-to-show', function () {
-        mainWindow.maximize();
-
         if (process.env.NODE_ENV && process.env.NODE_ENV === 'dev') {
             mainWindow.webContents.openDevTools();
         } else {
