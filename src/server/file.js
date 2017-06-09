@@ -47,8 +47,10 @@ module.exports = {
         });
     },
     metadata: function (file, cb) {
-        var mbtiles = new MBTiles(decodeURIComponent(file));
+        var file = decodeURIComponent(file);
+        var mbtiles = new MBTiles(file);
         mbtiles.metadata().then(function (metadata) {
+            metadata.shortFile = tildify(file);
             cb(null, metadata);
         });
     }
@@ -57,6 +59,7 @@ module.exports = {
 function statMbtile(file, cb) {
     var mbtiles = new MBTiles(file);
     // yeah I know :/
+    // todo: refactor to use metadata function above
     mbtiles.metadata().then(function (metadata) {
         fs.stat(file, function (err, stats) {
             if (err) return cb(err);

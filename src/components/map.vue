@@ -1,8 +1,7 @@
 <template>
 <div>
-    <div id='map' class='bg-near-black w-100 vh-100'></div>
-    <!-- todo: set a cool title -->
-    <h1 id='title'></h1>
+    <div id='map' class='no-drag bg-near-black w-100 vh-100'></div>
+    <h4 v-if='shortFile' class='normal top-0 right-0 white code tr ma3 fixed' id='title'>{{ shortFile }}</h4>
 </div>
 </template>
 
@@ -15,18 +14,18 @@ var mapStyle = require('../client/mapStyle');
 
 module.exports = {
     mounted: function () {
+        var that = this;
         var hash = qs.parse(window.location.hash);
-        var filepath = hash['/map?file'];
+        var filepath = encodeURIComponent(hash['/map?file']);
         var map, metadata;
-
-        console.log('filezPath', this.filezPath);
-        console.log('filez', this.filez);
 
         mapboxgl.accessToken = '';
 
-        request('http://localhost:20009/metadata/' + encodeURIComponent(filepath), function (err, resp, body) {
+        request('http://localhost:20009/metadata/' + filepath, function (err, resp, body) {
             if (err) return log.error(err);
             metadata = JSON.parse(body);
+            console.log(metadata);
+            that.shortFile = metadata.shortFile;
             map = new mapboxgl.Map({
                 container: 'map',
                 maxZoom: 30,
@@ -35,9 +34,18 @@ module.exports = {
         });
     },
     data: function () {
-        return {};
+        return {
+            shortFile: this.shortFile
+        };
     }
 };
 </script>
 
 <style src='../../node_modules/mapbox-gl/dist/mapbox-gl.css'></style>
+
+<style>
+    #title {
+        font-size: 14px;
+        text-shadow: 1px 1px 0px black;
+    }
+</style>
