@@ -7,24 +7,17 @@
         <link rel='stylesheet' href='https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css'/>
         <style type='text/css'>
             body {
+                -webkit-font-smoothing: antialiased;
                 line-height: 1.4;
                 background-color: white;
             }
-            ul, li {
-                list-style-type: none;
-            }
-            .drag {
-                -webkit-app-region: drag;
-            }
-            .no-drag{
-                --webkit-app-region: no-drag;
-            }
-            #dragbar {
-                height: 20px;
-            }
+            ul, li { list-style-type: none; }
+            .drag { -webkit-app-region: drag; }
+            .no-drag{ -webkit-app-region: no-drag; }
+            #dragbar { height: 20px; }
         </style>
     </head>
-    <body class='helvetica black-70 bg-light-gray'>
+    <body class='helvetica black-90 bg-white drag'>
         <div class='drag fixed top-0 w-100 z-max' id='dragbar'></div>
         <div id='app'>
             <transition name='fade' mode='out-in'>
