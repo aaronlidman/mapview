@@ -1,3 +1,5 @@
+var chroma = require('chroma-js');
+
 var darkColors = [
     '#000000',  // black
     '#111111',  // dark gray
@@ -6,8 +8,8 @@ var darkColors = [
 ];
 
 var lightColors = [
-    '#FF191D',  // red
-    '#FF9500',  // orange
+    '#FF0000',  // red
+    '#FF8C19',  // orange
     '#FFF266',  // yellow
     '#00FF00',  // lime green
     '#00FF00',  // bright green
@@ -16,7 +18,8 @@ var lightColors = [
     '#66FFCC',  // teal
     '#CC66FF',  // purple
     '#FC49A3',  // pink
-    '#ffffff'   // white
+    '#cccccc',  // gray
+    '#cccccc'   // gray
 ];
 
 function random(min, max) {
@@ -31,6 +34,7 @@ module.exports = function (filepath, metadata) {
     vectorLayers.forEach(function (layer) {
         // each layer gets it's own color
         var lightColor = lightColors[random(0, (lightColors.length - 1))];
+        var backgroundColor = chroma(lightColor).darken(5).saturate(1.5).hex();
 
         // todo: confirm multiple layers with multiple background doesn't break
         styleLayers.push({
@@ -38,7 +42,7 @@ module.exports = function (filepath, metadata) {
             type: 'background',
             'source-layer': layer.id,
             paint: {
-                'background-color': darkColors[random(0, (darkColors.length - 1))]
+                'background-color': backgroundColor
             }
         });
 
@@ -95,9 +99,9 @@ module.exports = function (filepath, metadata) {
             'source-layer': layer.id,
             filter: ['==', '$type', 'Point'],
             paint: {
-                'circle-color': lightColor,
-                'circle-radius': 2.5,
-                'circle-opacity': 0.75
+                'circle-color': chroma(lightColor).saturate().brighten(2).hex(),
+                'circle-radius': 2,
+                'circle-opacity': 0.85
             }
         });
     });
