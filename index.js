@@ -16,12 +16,16 @@ var config = {
 var mainWindow;
 
 function createWindow() {
+    var screenSize = electron.screen.getPrimaryDisplay().workAreaSize;
+    var width = Math.round(screenSize.width * 0.75);
+    var height = Math.round(screenSize.height * 0.75);
+
     mainWindow = new BrowserWindow({
         titleBarStyle: 'hidden',
         show: false,
         backgroundColor: '#000',
-        width: 1024,
-        height: 640
+        width: width,
+        height: height
     });
 
     mainWindow.loadURL('http://localhost:' + config.port);
