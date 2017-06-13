@@ -2,14 +2,45 @@
 <div>
     <table id='navigation' class='collapse left-0 z-max fixed top-3 bold bg-white black'>
         <tr>
-            <td id='back-button' class='pt3 pb3 pr3 pl3 hover-bg-light-gray pointer' @click.once='backToPicker'>◀</td>
-            <td class='ttu pa3 pr4 ma0 drag'>
+            <td id='back-button' class='pa2 hover-bg-light-gray pointer' @click.once='backToPicker'>◀</td>
+            <td class='ttu pa2 pr3 ma0 drag'>
                 <h1 id='title' class='ma0'>View</h1>
             </td>
         </tr>
     </table>
+    <div class='z-max tc w-100'>
+        <h4 v-if='shortFile' class='z-max normal white code ma0 drag' id='filename'>{{ shortFile }}</h4>
+    </div>
+    <div id='selectors' class='z-max fixed fr bottom-0 right-0'>
+        <span v-if='!showSelectors' @click='showSelectors = true' class='fa fa-cog white-70 hover-white fa-2x pointer pa2 pt1 pb1'></span>
+        <span v-if='showSelectors' @click='showSelectors = false' class='bg-white fa fa-close pointer fa-2x pa2 pt1 pb1'></span>
+    </div>
+    <div id='selectorPanel' v-if='showSelectors' class='z-9999 fixed bg-white bottom-0 right-0 pa3 mb45'>
+        <!--
+            - todo: break into it's own component
+            - todo: persist state on menu close and repopen
+            - todo: fix filter labels
+            - todo: select specific color pallettes
+            - todo: change background/foreground color
+        -->
+        <li class='mb2'>
+            <div class='mb1'>Filter:</div>
+            <form>
+                <input type='checkbox' name='inspect' value='inspect' id='inspect'><label for='inspect'> show attributes</label>
+            </form>
+        </li>
+        <li>
+            <div class='mb1'>Show:</div>
+            <form>
+                <input type='radio' name='chooseone' value='all'><label for='all'> all</label><br>
+                <input type='radio' name='chooseone' value='points'><label for='points'> only points</label><br>
+                <input type='radio' name='chooseone' value='lines'><label for='lines'> only lines</label><br>
+                <input type='radio' name='chooseone' value='polygons'><label for='polygons'> only polygons</label><br>
+            </form>
+        </li>
+        <li></li>
+    </div>
     <div id='map' class='no-drag bg-near-black w-100 vh-100'></div>
-    <h4 v-if='shortFile' class='normal top-0 right-0 white code tr ma2 fixed drag' id='filename'>{{ shortFile }}</h4>
 </div>
 </template>
 
@@ -27,12 +58,11 @@ module.exports = {
         var filepath = encodeURIComponent(hash['/map?file']);
         var map, metadata;
 
-        mapboxgl.accessToken = 'pk.eyJ1IjoiYWFyb25saWRtYW4iLCJhIjoiNTVucTd0TSJ9.wVh5WkYXWJSBgwnScLupiQ';
+        mapboxgl.accessToken = '';
 
         request('http://localhost:20009/metadata/' + filepath, function (err, resp, body) {
             if (err) return log.error(err);
             metadata = JSON.parse(body);
-            console.log(metadata);
             that.shortFile = metadata.shortFile;
             map = new mapboxgl.Map({
                 container: 'map',
@@ -43,7 +73,8 @@ module.exports = {
     },
     data: function () {
         return {
-            shortFile: this.shortFile
+            shortFile: this.shortFile,
+            showSelectors: this.showSelectors
         };
     },
     methods: {
@@ -61,6 +92,10 @@ module.exports = {
 <style>
     .top-3 {
         top: 3rem;
+    }
+
+    .mb45 {
+        margin-bottom: 2.5rem;
     }
 
     #filename {
