@@ -9,11 +9,7 @@
         </tr>
     </table>
     <h4 v-if='shortFile' class='z-max fixed top-0 right-0 normal white code ma2 drag' id='filename'>{{ shortFile }}</h4>
-    <div id='modifiersButton' class='z-max fixed bottom-0 right-0'>
-        <span v-if='!showModifiers' @click='showModifiers = true' class='fa fa-cog white-70 hover-white fa-2x pointer pa2 pt1 pb1'></span>
-        <span v-if='showModifiers' @click='showModifiers = false' class='bg-white fa fa-close pointer fa-2x pa2 pt1 pb1'></span>
-    </div>
-    <modifierMenu :show='showModifiers'></modifierMenu>
+    <modifierMenu :filter.sync='filter' :inspect.sync='inspect'></modifierMenu>
     <div id='map' class='no-drag bg-near-black w-100 vh-100'></div>
 </div>
 </template>
@@ -52,7 +48,8 @@ module.exports = {
     data: function () {
         return {
             shortFile: this.shortFile,
-            showModifiers: this.showModifiers
+            filter: 'all',
+            inspect: false
         };
     },
     methods: {
@@ -71,7 +68,6 @@ module.exports = {
     .top-3 {
         top: 3rem;
     }
-
     #filename {
         font-size: 14px;
         text-shadow: 1px 1px 0px black;
