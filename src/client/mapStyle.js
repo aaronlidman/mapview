@@ -1,13 +1,6 @@
 var chroma = require('chroma-js');
 
-var darkColors = [
-    '#000000',  // black
-    '#111111',  // dark gray
-    '#001326',  // dark blue
-    '#002609'   // dark green
-];
-
-var lightColors = [
+var baseColors = [
     '#FF0000',  // red
     '#FF8C19',  // orange
     '#FFF266',  // yellow
@@ -26,17 +19,23 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-module.exports = function (filepath, metadata) {
+module.exports = function (filepath, metadata, filter, baseColor) {
     var vectorLayers = JSON.parse(metadata.json).vector_layers;
     var source = filepath;
+    filter = filter || 'none';
+    var backgroundColor, foregroundColor;
+
     var styleLayers = [];
+    var polygonLayers = [];
+    var pointLayers = [];
+    var lineLayers = [];
 
     vectorLayers.forEach(function (layer) {
-        // each layer gets it's own color
-        var lightColor = lightColors[random(0, (lightColors.length - 1))];
-        var backgroundColor = chroma(lightColor).darken(5).saturate(1.5).hex();
+        // each layer gets it's own colors
+        foregroundColor = (baseColor && baseColor[0] === '#') ? baseColor : baseColors[random(0, (baseColors.length - 1))];
+        backgroundColor = chroma(foregroundColor).darken(5).saturate(1.5).hex();
 
-        // todo: confirm multiple layers with multiple background doesn't break
+        // todo: multiple layer support, would need to remove all but one of the backgrounds here
         styleLayers.push({
             id: 'background',
             type: 'background',
@@ -46,7 +45,7 @@ module.exports = function (filepath, metadata) {
             }
         });
 
-        styleLayers.push({
+        polygonLayers.push({
             id: layer.id + '-polygons',
             type: 'fill',
             source: source,
@@ -54,11 +53,11 @@ module.exports = function (filepath, metadata) {
             filter: ['==', '$type', 'Polygon'],
             paint: {
                 'fill-opacity': 0.1,
-                'fill-color': lightColor
+                'fill-color': foregroundColor
             }
         });
 
-        styleLayers.push({
+        polygonLayers.push({
             id: layer.id + '-polygon-outlines',
             type: 'line',
             source: source,
@@ -69,13 +68,13 @@ module.exports = function (filepath, metadata) {
                 'line-cap': 'round'
             },
             paint: {
-                'line-color': lightColor,
+                'line-color': foregroundColor,
                 'line-width': 0.75,
                 'line-opacity': 0.75
             }
         });
 
-        styleLayers.push({
+        lineLayers.push({
             id: layer.id + '-lines',
             type: 'line',
             source: source,
@@ -86,25 +85,30 @@ module.exports = function (filepath, metadata) {
                 'line-cap': 'round'
             },
             paint: {
-                'line-color': lightColor,
+                'line-color': foregroundColor,
                 'line-width': 0.75,
                 'line-opacity': 0.75
             }
         });
 
-        styleLayers.push({
+        pointLayers.push({
             id: layer.id + '-points',
             type: 'circle',
             source: source,
             'source-layer': layer.id,
             filter: ['==', '$type', 'Point'],
             paint: {
-                'circle-color': chroma(lightColor).saturate().brighten(2).hex(),
+                'circle-color': chroma(foregroundColor).saturate().brighten(2).hex(),
                 'circle-radius': 2,
                 'circle-opacity': 0.85
             }
         });
     });
+
+    if (filter === 'points') styleLayers = styleLayers.concat(pointLayers);
+    if (filter === 'lines') styleLayers = styleLayers.concat(lineLayers);
+    if (filter === 'polygons') styleLayers = styleLayers.concat(polygonLayers);
+    if (filter === 'none') styleLayers = styleLayers.concat(pointLayers, lineLayers, polygonLayers);
 
     var style = {
         version: 8,
@@ -122,5 +126,9 @@ module.exports = function (filepath, metadata) {
     if (metadata.center) style.center = metadata.center.slice(0, 2);
     if (metadata.minzoom || metadata.center[2]) style.zoom = metadata.minzoom || metadata.center[2];
 
-    return style;
+    return {
+        style: style,
+        backgroundColor: backgroundColor,
+        foregroundColor: foregroundColor
+    };
 };

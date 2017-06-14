@@ -18,8 +18,8 @@
         <li>
             <div class='mb1'>Show:</div>
             <form>
-                <input type='radio' id='all' value='all' v-model='filtered' @change='$emit("update:filter", $event.target.value)'>
-                <label for='all'> all</label><br>
+                <input type='radio' id='none' value='none' v-model='filtered' @change='$emit("update:filter", $event.target.value)'>
+                <label for='none'> all</label><br>
                 <input type='radio' id='points' value='points' v-model='filtered' @change='$emit("update:filter", $event.target.value)'>
                 <label for='points'> only points</label><br>
                 <input type='radio' id='lines' value='lines' v-model='filtered' @change='$emit("update:filter", $event.target.value)'>
@@ -37,7 +37,7 @@ module.exports = {
     props: ['filter', 'inspect'],
     data: function() {
         return {
-            filtered: 'all',
+            filtered: 'none',
             showAttributes: false,
             show: false
         }

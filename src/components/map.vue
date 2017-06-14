@@ -8,7 +8,7 @@
             </td>
         </tr>
     </table>
-    <h4 v-if='shortFile' class='z-max fixed top-0 right-0 normal white code ma2 drag' id='filename'>{{ shortFile }}</h4>
+    <h4 v-if='metadata' class='z-max fixed top-0 right-0 normal white code ma2 drag' id='filename'>{{ metadata.shortFile }}</h4>
     <modifierMenu :filter.sync='filter' :inspect.sync='inspect'></modifierMenu>
     <div id='map' class='no-drag bg-near-black w-100 vh-100'></div>
 </div>
@@ -27,29 +27,34 @@ module.exports = {
         modifierMenu
     },
     mounted: function () {
-        var that = this;
         var hash = qs.parse(window.location.hash);
-        var filepath = encodeURIComponent(hash['/map?file']);
-        var map, metadata;
+        this.filepath = encodeURIComponent(hash['/map?file']);
 
         mapboxgl.accessToken = '';
 
-        request('http://localhost:20009/metadata/' + filepath, function (err, resp, body) {
+        var that = this;
+        request('http://localhost:20009/metadata/' + that.filepath, function (err, resp, body) {
             if (err) return log.error(err);
-            metadata = JSON.parse(body);
-            that.shortFile = metadata.shortFile;
-            map = new mapboxgl.Map({
+            that.metadata = JSON.parse(body);
+            var style = mapStyle(that.filepath, that.metadata);
+            that.backgroundColor = style.backgroundColor;
+            that.foregroundColor = style.foregroundColor;
+            that.map = new mapboxgl.Map({
                 container: 'map',
                 maxZoom: 30,
-                style: mapStyle(filepath, metadata)
+                style: style.style
             });
         });
     },
     data: function () {
         return {
-            shortFile: this.shortFile,
-            filter: 'all',
-            inspect: false
+            backgroundColor: null,
+            foregroundColor: null,
+            metadata: null,
+            filter: 'none',
+            inspect: false,
+            filepath: null,
+            map: null
         };
     },
     methods: {
@@ -57,6 +62,14 @@ module.exports = {
             this.$router.push({
                 path: '/'
             });
+        }
+    },
+    watch: {
+        // computed property just wasn't updating, could never track down why
+        filter: function () {
+            var style = mapStyle(this.filepath, this.metadata, this.filter, this.foregroundColor);
+            console.log('restyled');
+            this.map.setStyle(style.style);
         }
     }
 };
