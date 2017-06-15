@@ -4,7 +4,7 @@
         <meta charset='utf-8' />
         <title>mapview</title>
         <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-        <link rel='stylesheet' href='https://unpkg.com/tachyons@4.7.0/css/tachyons.min.css'/>
+        <link rel='stylesheet' href='./node_modules/tachyons/css/tachyons.min.css'/>
         <style type='text/css'>
             body {
                 -webkit-font-smoothing: antialiased;
@@ -15,10 +15,12 @@
             .drag { -webkit-app-region: drag; }
             .no-drag{ -webkit-app-region: no-drag; }
             #dragbar { height: 20px; }
+            label { cursor: pointer; }
         </style>
     </head>
     <body class='helvetica black-90 bg-near-white drag'>
         <div class='drag fixed top-0 w-100 z-max' id='dragbar'></div>
+        <!-- todo: make dragbar into a component that each other component can manipulate styling via this.data -->
         <div id='app'>
             <transition name='fade' mode='out-in'>
                 <router-view class='view'></router-view>
