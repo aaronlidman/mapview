@@ -11,65 +11,92 @@ var tildify = require('tildify');
 var MBTiles = require('mbtiles-offline');
 
 module.exports = {
-    scan: function (directory, callback) {
+    scan: function (directory, socket, callback) {
         var q = queue(10);
 
-        exec('find ' + directory + ' -type f -name "*.mbtiles" 2> /dev/null', function (err, stdout) {
+        var searchArgs = [
+            '-maxdepth 2',
+            '-maxdepth 3',
+            '-maxdepth 4',
+            '-maxdepth 5',
+            ''
+        ];
+
+        searchArgs.forEach(function (arg) {
+            q.defer(find, directory, arg, socket);
+        });
+
+        q.awaitAll(function (err) {
+            if (err) {
+                log.error(err);
+                return callback(err);
+            }
+            callback(null);
+        });
+    },
+    metadata: function (file, callback) {
+        file = decodeURIComponent(file);
+        var mbtiles = new MBTiles(file);
+        mbtiles.metadata().then(function (metadata) {
+            metadata.shortFile = tildify(file);
+            callback(null, metadata);
+        });
+    }
+};
+
+function find(directory, arg, socket, callback) {
+    var qq = queue(10);
+
+    exec('find ' + directory + ' ' + arg + ' -type f -iname "*.mbtiles" 2> /dev/null', function (err, stdout) {
+        if (err) {
+            log.error(err);
+            return callback(err);
+        }
+
+        stdout.split('\n').forEach(function (file) {
+            // todo: ignore */node_modules/*
+            if (file.length) {
+                qq.defer(statMbtile, file);
+            }
+        });
+
+        qq.awaitAll(function (err, files) {
             if (err) {
                 log.error(err);
                 return callback(err);
             }
 
-            stdout.split('\n').forEach(function (file) {
-                if (file.length) {
-                    q.defer(statMbtile, file);
-                }
+            // sort the array by last modified
+            files.sort(function (a, b) {
+                return b.modified - a.modified;
             });
 
-            q.awaitAll(function (err, files) {
-                if (err) {
-                    log.error(err);
-                    return callback(err);
-                }
-
-                // sort the array by last modified
-                files.sort(function (a, b) {
-                    return b.modified - a.modified;
-                });
-
-                files = files.map(function (file) {
-                    file.modified = moment(file.modified).fromNow();
-                    return file;
-                });
-
-                callback(null, files);
+            files = files.map(function (file) {
+                // todo: replace moment with date-fns
+                file.modified = moment(file.modified).fromNow();
+                return file;
             });
-        });
-    },
-    metadata: function (file, cb) {
-        var file = decodeURIComponent(file);
-        var mbtiles = new MBTiles(file);
-        mbtiles.metadata().then(function (metadata) {
-            metadata.shortFile = tildify(file);
-            cb(null, metadata);
-        });
-    }
-};
 
-function statMbtile(file, cb) {
+            socket.emit('files', files);
+            callback(null, true);
+        });
+    });
+}
+
+function statMbtile(file, callback) {
     var mbtiles = new MBTiles(file);
     // yeah I know :/
     // todo: refactor to use metadata function above
     mbtiles.metadata().then(function (metadata) {
         fs.stat(file, function (err, stats) {
-            if (err) return cb(err);
+            if (err) return callback(err);
             // add a few more useful properties
             metadata.path = file;
             metadata.basename = path.basename(file);
             metadata.dir = tildify(path.dirname(file));
             metadata.size = filesize(stats.size);
             metadata.modified = new Date(stats.mtime);
-            cb(null, metadata);
+            callback(null, metadata);
         });
     });
 }
