@@ -9,7 +9,7 @@
         </tr>
     </table>
     <h4 v-if='metadata' class='z-max fixed top-0 right-0 normal white code ma2 drag' id='filename'>{{ metadata.shortFile }}</h4>
-    <modifierMenu :filter.sync='filter' :inspect.sync='inspect'></modifierMenu>
+    <modifierMenu :filter.sync='filter'></modifierMenu>
     <div id='map' class='no-drag bg-near-black w-100 vh-100'></div>
 </div>
 </template>
@@ -49,7 +49,7 @@ module.exports = {
 
             that.map.addControl(new MapboxInspect({
                 popup: new mapboxgl.Popup({
-                    closeButton: false,
+                    closeButton: true,
                     closeOnClick: false
                 }),
                 showInspectMap: true,
@@ -65,7 +65,6 @@ module.exports = {
             foregroundColor: null,
             metadata: null,
             filter: 'none',
-            inspect: false,
             filepath: null,
             map: null
         };

@@ -9,12 +9,6 @@
             - todo: select specific color pallettes
             - todo: change background/foreground color
         -->
-        <li class='mb3'>
-            <div class='mb1'>Filter:</div>
-            <form>
-                <input type='checkbox' name='inspect' value='inspect' id='inspect' v-model='showAttributes' @change='$emit("update:inspect", $event.target.checked)'><label for='inspect'> show attributes</label>
-            </form>
-        </li>
         <li>
             <div class='mb1'>Show:</div>
             <form>
@@ -34,11 +28,10 @@
 
 <script>
 module.exports = {
-    props: ['filter', 'inspect'],
+    props: ['filter'],
     data: function() {
         return {
             filtered: 'none',
-            showAttributes: false,
             show: false
         }
     }
