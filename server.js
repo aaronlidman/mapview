@@ -4,24 +4,22 @@ var fs = require('fs');
 var path = require('path');
 var express = require('express');
 var app = express();
+var server = require('http').Server(app);
 var log = require('electron-log');
 var homedir = require('os').homedir();
 var MBTiles = require('mbtiles-offline');
 var tiletype = require('@mapbox/tiletype');
+var io = require('socket.io')(server);
 
 app.use(express.static(path.join(__dirname, './')));
 
 var file = require('./src/server/file');
 var loadedTiles = {};
 
-function searchMbtiles(req, res) {
-    var dir = req.params.dir ? decodeURIComponent(req.params.dir) : homedir;
-    file.scan(dir, function (err, files) {
-        if (err) {
-            log.error(err);
-            return res.end(err);
-        }
-        res.send(files);
+function searchMbtiles(dir, socket) {
+    file.scan(dir, socket, function (err) {
+        if (err) return log.error(err);
+        socket.emit('done');
     });
 }
 
@@ -39,6 +37,7 @@ function getTile(req, res) {
     var p = req.params;
     var file = decodeURIComponent(p.source);
     if (!loadedTiles[file]) {
+        // todo: refactor to only initialize and get stats/metadata once per file
         loadedTiles[file] = new MBTiles(decodeURIComponent(file));
         loadedTiles[file].stats = fs.statSync(decodeURIComponent(file));
     }
@@ -61,12 +60,24 @@ function getTile(req, res) {
 }
 
 module.exports = function (config, callback) {
+    // todo: use websockets
     app.get('/mbtiles/:dir', searchMbtiles);
     app.get('/mbtiles', searchMbtiles);
     app.get('/metadata/:file', getMetadata);
     app.get('/:source/:z/:x/:y.:format', getTile);
 
-    app.listen(config.port, function () {
-        callback(null, config);
-    });
+    io.of('/picker')
+        .on('connection', function (socket) {
+            // immediately initialize a search and respond with individual events
+            console.log('connected');
+            searchMbtiles(homedir, socket);
+                // emits 'files' for each successful file search at increasing depths across the fs
+        });
+
+    server.listen(config.port);
+    callback(null, config.port);
+
+    // app.listen(config.port, function () {
+    //     callback(null, config);
+    // });
 };

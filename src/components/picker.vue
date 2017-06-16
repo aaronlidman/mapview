@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class='bg-white-50 fixed w-50 vh-100 dt drag'>
-        <div class='dtc v-mid bg-yellow'>
+        <div class='dtc v-mid bg-blue'>
             <h1 class='mb5 white f1 ttu tc'>Pick</h1>
         </div>
     </div>
@@ -17,8 +17,8 @@
                             <div>
                                 <span class='filename black'>{{ file.basename }}</span> <span class='black-40 breaky'>in {{ file.dir }}</span>
                             </div>
-                            <div>
-                                <span class='black-40'>{{ file.size }}, {{ file.modified }}</span>
+                            <div class='black-50'>
+                                <span>{{ file.size }}</span><span class='ml2'>{{ file.modified }}</span>
                             </div>
                         </td>
                     </tr>
@@ -56,9 +56,11 @@ var request = require('request');
 module.exports = {
     data: function () {
         return {
-            loading: false,
-            files: null,
-            error: null
+            loading: true,
+            loaded: false,
+            files: [],
+            error: null,
+            socket: null
         }
     },
     created: function () {
@@ -70,16 +72,33 @@ module.exports = {
     },
     methods: {
         fetchData: function () {
+            var socket = require('socket.io-client')('http://localhost:20009/picker');
             var that = this;
-            that.error = that.files = null;
-            that.loading = true;
 
-            request('http://localhost:20009/mbtiles/', function(err, resp, body) {
+            socket.on('connect', function () {
+                console.log('connected, searching');
+                that.socket = socket;
+            });
+
+            socket.on('files', function (foundFiles) {
                 that.loading = false;
-                that.files = JSON.parse(body);
+                if (!that.files) {
+                    that.files.concat(files);
+                } else {
+                    foundFiles.map(function (file) {
+                        // todo: uniq the files
+                        that.files.push(file);
+                    });
+                }
+            });
+
+            socket.on('done', function () {
+                // todo: hide spinner completely
+                this.loaded = true;
             });
         },
         selectFile: function(filePath) {
+            socket.close();
             this.$router.push({
                 path: 'map',
                 query: {
