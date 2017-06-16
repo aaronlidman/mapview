@@ -73,32 +73,48 @@ module.exports = {
     methods: {
         fetchData: function () {
             var socket = require('socket.io-client')('http://localhost:20009/picker');
+                // makes the actual connection
             var that = this;
 
+            var uniqueFiles = new Set();
+
             socket.on('connect', function () {
-                console.log('connected, searching');
                 that.socket = socket;
             });
 
             socket.on('files', function (foundFiles) {
                 that.loading = false;
-                if (!that.files) {
-                    that.files.concat(files);
+                if (!that.files.length) {
+                    that.files = foundFiles;
+                    uniqueFiles = new Set(foundFiles.map(JSON.stringify));
                 } else {
-                    foundFiles.map(function (file) {
-                        // todo: uniq the files
-                        that.files.push(file);
-                    });
+                    // because Vue doesn't know Sets yet
+                    // I know, not ideal
+                    foundFiles
+                        .map(JSON.stringify)
+                        .map(function(file) {
+                            uniqueFiles.add(file);
+                        });
+
+                    that.files = Array.from(uniqueFiles)
+                        .map(JSON.parse)
+                        .sort(function (a, b) {
+                            return +new Date(b.modified) - +new Date(a.modified);
+                        });
+
+                        // todo: make modified dates human readable
                 }
             });
 
             socket.on('done', function () {
                 // todo: hide spinner completely
                 this.loaded = true;
+                // todo: cache the file list and prepopulate with it on next load
+                    // to avoid the incrimental loading jitteryness and overall just be quicker
             });
         },
         selectFile: function(filePath) {
-            socket.close();
+            this.socket.close();
             this.$router.push({
                 path: 'map',
                 query: {

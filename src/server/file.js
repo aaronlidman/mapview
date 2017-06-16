@@ -15,7 +15,6 @@ module.exports = {
         var q = queue(10);
 
         var searchArgs = [
-            '-maxdepth 2',
             '-maxdepth 3',
             '-maxdepth 4',
             '-maxdepth 5',
@@ -65,17 +64,6 @@ function find(directory, arg, socket, callback) {
                 log.error(err);
                 return callback(err);
             }
-
-            // sort the array by last modified
-            files.sort(function (a, b) {
-                return b.modified - a.modified;
-            });
-
-            files = files.map(function (file) {
-                // todo: replace moment with date-fns
-                file.modified = moment(file.modified).fromNow();
-                return file;
-            });
 
             socket.emit('files', files);
             callback(null, true);
