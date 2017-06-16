@@ -46,6 +46,17 @@ module.exports = {
                 maxZoom: 30,
                 style: style.style
             });
+
+            that.map.addControl(new MapboxInspect({
+                popup: new mapboxgl.Popup({
+                    closeButton: false,
+                    closeOnClick: false
+                }),
+                showInspectMap: true,
+                showInspectButton: false,
+                showMapPopupOnHover: false,
+                showInspectMapPopupOnHover: false
+            }));
         });
     },
     data: function () {
@@ -56,8 +67,7 @@ module.exports = {
             filter: 'none',
             inspect: false,
             filepath: null,
-            map: null,
-            inspect: null
+            map: null
         };
     },
     methods: {
@@ -72,27 +82,6 @@ module.exports = {
         filter: function () {
             var style = mapStyle(this.filepath, this.metadata, this.filter, this.foregroundColor);
             this.map.setStyle(style.style);
-        },
-        inspect: function() {
-            if (!this.inspectControl) {
-                this.inspectControl = new MapboxInspect({
-                    popup: new mapboxgl.Popup({
-                        closeButton: false,
-                        closeOnClick: false
-                    }),
-                    showInspectMap: false,
-                    showInspectButton: false,
-                    showMapPopupOnHover: false,
-                    showInspectMapPopupOnHover: false,
-                    useInspectStyle: false
-                });
-            }
-
-            if (this.inspect) {
-                this.map.addControl(this.inspectControl);
-            } else {
-                this.map.removeControl(this.inspectControl);
-            }
         }
     }
 };
