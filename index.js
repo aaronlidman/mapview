@@ -1,17 +1,10 @@
 #!/usr/bin/env node
 'use strict';
-
 var server = require('./server');
-var argv = require('minimist')(process.argv.slice(2));
-
 var electron = require('electron');
 var log = require('electron-log');
 var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
-
-var config = {
-    port: argv.port || 20009
-};
 
 var mainWindow;
 
@@ -28,7 +21,7 @@ function createWindow() {
         height: height
     });
 
-    mainWindow.loadURL('http://localhost:' + config.port);
+    mainWindow.loadURL('http://localhost:20009');
 
     // on window close throw everything away
     mainWindow.on('closed', function () {
@@ -36,7 +29,7 @@ function createWindow() {
     });
 
     mainWindow.once('ready-to-show', function () {
-        if (process.env.NODE_ENV && process.env.NODE_ENV === 'dev') {
+        if (process.env.NODE_ENV && process.env.NODE_ENV == 'dev') {
             mainWindow.webContents.openDevTools();
         } else {
             mainWindow.show();
@@ -45,10 +38,10 @@ function createWindow() {
 }
 
 app.on('ready', function () {
-    server(config, function (err, config) {
+    server(function (err) {
         if (err) return log.error(err);
         createWindow();
-        log.info('Serving on http://localhost:' + config.port);
+        log.info('Serving on http://localhost:20009');
     });
 });
 

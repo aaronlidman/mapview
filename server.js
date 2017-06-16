@@ -59,7 +59,7 @@ function getTile(req, res) {
         });
 }
 
-module.exports = function (config, callback) {
+module.exports = function (callback) {
     // todo: use websockets
     app.get('/mbtiles/:dir', searchMbtiles);
     app.get('/mbtiles', searchMbtiles);
@@ -69,15 +69,9 @@ module.exports = function (config, callback) {
     io.of('/picker')
         .on('connection', function (socket) {
             // immediately initialize a search and respond with individual events
-            console.log('connected');
             searchMbtiles(homedir, socket);
-                // emits 'files' for each successful file search at increasing depths across the fs
         });
 
-    server.listen(config.port);
-    callback(null, config.port);
-
-    // app.listen(config.port, function () {
-    //     callback(null, config);
-    // });
+    server.listen(20009);
+    callback(null, 'ok');
 };
