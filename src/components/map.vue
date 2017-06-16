@@ -19,6 +19,8 @@ var mapboxgl = require('mapbox-gl');
 var qs = require('query-string');
 var request = require('request');
 var log = require('electron-log');
+var MapboxInspect = require('mapbox-gl-inspect');
+
 var mapStyle = require('../client/mapStyle');
 var modifierMenu = require('./modifierMenu.vue');
 
@@ -54,7 +56,8 @@ module.exports = {
             filter: 'none',
             inspect: false,
             filepath: null,
-            map: null
+            map: null,
+            inspect: null
         };
     },
     methods: {
@@ -68,14 +71,35 @@ module.exports = {
         // computed property just wasn't updating, could never track down why
         filter: function () {
             var style = mapStyle(this.filepath, this.metadata, this.filter, this.foregroundColor);
-            console.log('restyled');
             this.map.setStyle(style.style);
+        },
+        inspect: function() {
+            if (!this.inspectControl) {
+                this.inspectControl = new MapboxInspect({
+                    popup: new mapboxgl.Popup({
+                        closeButton: false,
+                        closeOnClick: false
+                    }),
+                    showInspectMap: false,
+                    showInspectButton: false,
+                    showMapPopupOnHover: false,
+                    showInspectMapPopupOnHover: false,
+                    useInspectStyle: false
+                });
+            }
+
+            if (this.inspect) {
+                this.map.addControl(this.inspectControl);
+            } else {
+                this.map.removeControl(this.inspectControl);
+            }
         }
     }
 };
 </script>
 
 <style src='../../node_modules/mapbox-gl/dist/mapbox-gl.css'></style>
+<style src='../../node_modules/mapbox-gl-inspect/dist/mapbox-gl-inspect.css'></style>
 
 <style>
     .top-3 {
