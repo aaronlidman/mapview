@@ -19,22 +19,14 @@ function random(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
-module.exports = function (filepath, metadata, filter, baseColor) {
-    var vectorLayers = JSON.parse(metadata.json).vector_layers;
-    var source = filepath;
+function createVectorStyle(vectorLayers, filter, source, backgroundColor, foregroundColor) {
     filter = filter || 'none';
-    var backgroundColor, foregroundColor;
-
     var styleLayers = [];
     var polygonLayers = [];
     var pointLayers = [];
     var lineLayers = [];
 
     vectorLayers.forEach(function (layer) {
-        // each layer gets it's own colors
-        foregroundColor = (baseColor && baseColor[0] === '#') ? baseColor : baseColors[random(0, (baseColors.length - 1))];
-        backgroundColor = chroma(foregroundColor).darken(5).saturate(1.5).hex();
-
         // todo: multiple layer support, would need to remove all but one of the backgrounds here
         styleLayers.push({
             id: 'background',
@@ -110,6 +102,35 @@ module.exports = function (filepath, metadata, filter, baseColor) {
     if (filter === 'polygons') styleLayers = styleLayers.concat(polygonLayers);
     if (filter === 'none') styleLayers = styleLayers.concat(pointLayers, lineLayers, polygonLayers);
 
+    return styleLayers;
+}
+
+function createRasterStyle(source, minzoom, maxzoom) {
+    return [{
+        'id': 'raster-tiles',
+        'type': 'raster',
+        'source': source,
+        'minzoom': minzoom || 0,
+        'maxzoom': maxzoom || 30
+    }];
+}
+
+module.exports = function (filepath, metadata, filter, baseColor) {
+    var source = filepath;
+    var styleLayers;
+
+    var foregroundColor = (baseColor && baseColor[0] === '#') ? baseColor : baseColors[random(0, (baseColors.length - 1))];
+    var backgroundColor = chroma(foregroundColor).darken(5).saturate(1.5).hex();
+
+    if (metadata.format === 'jpg' || metadata.format === 'png') {
+        metadata.type = 'raster';
+        styleLayers = createRasterStyle(source, metadata.minzoom, metadata.maxzoom);
+    } else {
+        metadata.type = 'vector';
+        var layers = JSON.parse(metadata.json).vector_layers;
+        styleLayers = createVectorStyle(layers, filter, source, backgroundColor, foregroundColor);
+    }
+
     var style = {
         version: 8,
         name: 'Mapview',
@@ -118,11 +139,12 @@ module.exports = function (filepath, metadata, filter, baseColor) {
     };
 
     style.sources[source] = {
-        type: 'vector',
+        type: metadata.type,
         tiles: ['http://localhost:20009/' + source + '/{z}/{x}/{y}.pbf'],
         maxzoom: metadata.maxzoom
     };
 
+    if (metadata.type === 'raster') style.sources[source].tileSize = 256;
     if (metadata.center) style.center = metadata.center.slice(0, 2);
     if (metadata.minzoom || metadata.center[2]) style.zoom = metadata.minzoom || metadata.center[2];
 
