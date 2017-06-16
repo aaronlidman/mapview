@@ -18,7 +18,7 @@
                                 <span class='filename black'>{{ file.basename }}</span> <span class='black-40 breaky'>in {{ file.dir }}</span>
                             </div>
                             <div class='black-50'>
-                                <span>{{ file.size }}</span><span class='ml2'>{{ file.modified }}</span>
+                                <span>{{ file.size }}</span><span class='ml2'>{{ file.modified }} ago</span>
                             </div>
                         </td>
                     </tr>
@@ -51,7 +51,7 @@
 </style>
 
 <script>
-var request = require('request');
+var distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
 
 module.exports = {
     data: function () {
@@ -73,9 +73,7 @@ module.exports = {
     methods: {
         fetchData: function () {
             var socket = require('socket.io-client')('http://localhost:20009/picker');
-                // makes the actual connection
             var that = this;
-
             var uniqueFiles = new Set();
 
             socket.on('connect', function () {
@@ -100,9 +98,12 @@ module.exports = {
                         .map(JSON.parse)
                         .sort(function (a, b) {
                             return +new Date(b.modified) - +new Date(a.modified);
+                        }).map(function (file) {
+                            file.modified = distanceInWordsToNow(file.modified, {
+                                includeSeconds: true
+                            });
+                            return file;
                         });
-
-                        // todo: make modified dates human readable
                 }
             });
 

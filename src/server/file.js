@@ -6,7 +6,6 @@ var exec = require('child_process').exec;
 var queue = require('d3-queue').queue;
 var log = require('electron-log');
 var filesize = require('filesize');
-var moment = require('moment');
 var tildify = require('tildify');
 var MBTiles = require('mbtiles-offline');
 
