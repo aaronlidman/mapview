@@ -19,4 +19,3 @@ rm -rf Mapview-darwin-x64/Mapview.app/Contents/Resources/app/node_modules/*/*.md
 rm -rf Mapview-darwin-x64/Mapview.app/Contents/Resources/app/node_modules/*/*.txt
 rm -rf Mapview-darwin-x64/Mapview.app/Contents/Resources/app/node_modules/*/test
 rm -rf Mapview-darwin-x64/Mapview.app/Contents/Resources/app/node_modules/*/*/test # org scoped modules
-g
