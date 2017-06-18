@@ -1,5 +1,6 @@
 {
-  "name": "Mapview",
+  "name": "mapview",
+  "productName": "Mapview",
   "version": "0.0.1",
   "description": "View mbtiles locally",
   "main": "./index.js",
