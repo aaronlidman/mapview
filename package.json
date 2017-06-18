@@ -1,15 +1,15 @@
 {
-  "name": "mapview",
+  "name": "Mapview",
   "version": "0.0.1",
   "description": "View mbtiles locally",
-  "main": "./app.js",
+  "main": "./index.js",
   "scripts": {
     "lint": "eslint *.js */*.js",
     "test": "tape test/*.js && npm run lint",
     "watch": "find src/ | entr -r npm start",
     "start": "npm run devCompile && electron .",
-    "configure": "export npm_config_target=1.6.6 && export npm_config_arch=x64 && export npm_config_target_arc h=x64 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install",
-    "build": "npm run configure && npm run compile && electron-packager . Mapview --overwrite",
+    "configure": "export npm_config_target=1.6.6 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install",
+    "build": "npm run configure && npm run compile && electron-packager . Mapview --overwrite && sh build-cleanup.sh",
     "devCompile": "NODE_ENV=dev && npm run browserify",
     "compile": "NODE_ENV=production npm run browserify",
     "browserify": "time browserify --fast --transform vueify src/client/index.js -o dist/build.js"
@@ -30,28 +30,28 @@
     "electron-packager": "^8.7.0",
     "eslint": "^2.13.1",
     "eslint-config-mourner": "^2.0.1",
-    "vueify": "9.4.1"
+    "vueify": "9.4.1",
+    "chroma-js": "^1.3.4",
+    "vue": "2.3.4",
+    "vue-router": "^2.5.3",
+    "request": "^2.81.0",
+    "query-string": "^4.3.4",
+    "mapbox-gl": "^0.37.0",
+    "mapbox-gl-inspect": "^1.2.3",
+    "date-fns": "^1.28.5",
+    "socket.io-client": "^2.0.3"
   },
   "dependencies": {
     "@mapbox/tiletype": "^0.3.1",
-    "chroma-js": "^1.3.4",
     "d3-queue": "^3.0.7",
-    "date-fns": "^1.28.5",
     "electron-log": "^2.2.4",
     "express": "^4.14.0",
     "filesize": "^3.5.10",
     "font-awesome": "^4.7.0",
-    "mapbox-gl": "^0.37.0",
-    "mapbox-gl-inspect": "^1.2.3",
     "mbtiles-offline": "^2.8.0",
-    "query-string": "^4.3.4",
-    "request": "^2.81.0",
     "socket.io": "^2.0.3",
-    "socket.io-client": "^2.0.3",
     "tachyons": "^4.7.4",
-    "tildify": "^1.2.0",
-    "vue": "2.3.4",
-    "vue-router": "^2.5.3"
+    "tildify": "^1.2.0"
   },
   "browser": {
     "vue": "vue/dist/vue.common.js"
