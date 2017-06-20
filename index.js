@@ -6,61 +6,9 @@ var log = require('electron-log');
 var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
 var Menu = electron.Menu;
+var menus = require('./src/app/menus');
 
 var mainWindow;
-
-var template = [{
-    label: 'View',
-    submenu: [
-        {role: 'reload'},
-        {role: 'forcereload'},
-        {role: 'toggledevtools'},
-        {type: 'separator'},
-        {role: 'resetzoom'},
-        {role: 'zoomin'},
-        {role: 'zoomout'},
-        {type: 'separator'},
-        {role: 'togglefullscreen'}
-    ]
-}, {
-    role: 'window',
-    submenu: [
-        {role: 'minimize'},
-        {role: 'close'}
-    ]
-}, {
-    role: 'help',
-    submenu: [{
-        label: 'Learn More',
-        click() {require('electron').shell.openExternal('https://electron.atom.io')}
-    }]
-}];
-
-if (process.platform === 'darwin') {
-    template.unshift({
-        label: app.getName(),
-        submenu: [
-            {role: 'about'},
-            {type: 'separator'},
-            {role: 'hide'},
-            {role: 'hideothers'},
-            {role: 'unhide'},
-            {type: 'separator'},
-            {role: 'quit'}
-        ]
-    });
-
-    // Window menu
-    template[2].submenu = [
-        {role: 'close'},
-        {role: 'minimize'},
-        {role: 'zoom'},
-        {type: 'separator'},
-        {role: 'front'}
-    ];
-}
-
-var menu = Menu.buildFromTemplate(template);
 
 function createWindow() {
     var screenSize = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -92,7 +40,7 @@ function createWindow() {
 }
 
 app.on('ready', function () {
-    Menu.setApplicationMenu(menu);
+    Menu.setApplicationMenu(menus);
     server(function (err) {
         if (err) return log.error(err);
         createWindow();
