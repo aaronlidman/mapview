@@ -1,24 +1,24 @@
 <template>
 <div>
     <div class='bg-white-50 fixed w-50 vh-100 dt drag'>
-        <div class='dtc v-mid bg-blue'>
+        <div class='dtc v-mid bg-new-yellow'>
             <h1 class='mb5 white f1 ttu tc'>Pick</h1>
         </div>
     </div>
-    <div id='file-list' class='pa4 w-50 fr bg-near-white drag' v-show='!loading'>
+    <div id='file-list' class='pa4 w-50 fr bg-white drag' v-show='!loading'>
         <div class='dt vh-100 center'>
             <div class='dtc v-mid'>
                 <table class='collapse'>
-                    <tr v-for='file in files' :key='file.path' @click.once='selectFile(file.path)' class='w-100 pointer hover-bg-white'>
+                    <tr v-for='file in files' :key='file.path' @click.once='selectFile(file.path)' class='w-100 pointer hover-bg-near-white'>
                         <td class='pl3'>
-                            <span class='fa fa-photo black-70 fa-fw'></span>
+                            <span class='fa fa-photo black-70 fa-fw fa-lg'></span>
                         </td>
                         <td class='pa3'>
                             <div>
-                                <span class='filename black'>{{ file.basename }}</span> <span class='black-40 breaky'>in {{ file.dir }}</span>
+                                <span class='black filename'>{{ file.basename }} </span><span class='black-40 breaky'>in {{ file.dir }}</span>
                             </div>
-                            <div class='black-50'>
-                                <span>{{ file.size }}</span><span class='ml2'>{{ file.modified }} ago</span>
+                            <div class='black-40'>
+                                <span>{{ file.modified }} ago</span> &#8226; <span>{{ file.size }}</span>
                             </div>
                         </td>
                     </tr>
@@ -37,6 +37,10 @@
     word-break: break-word;
 }
 
+.filename {
+    font-size: 1.25em;
+}
+
 .f1 {
     font-size: 6rem;
 }
@@ -45,8 +49,12 @@
     background-color: hsla(90, 70%, 55%, 1);
 }
 
-.hover-bg-light-yellow:hover {
-    background-color: #ffb;
+.bg-new-red {
+    background-color: #C94336;
+}
+
+.bg-new-yellow {
+    background-color: hsla(45, 87%, 60%, 1);
 }
 </style>
 
