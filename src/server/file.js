@@ -44,8 +44,9 @@ module.exports = {
 
 function find(directory, arg, socket, callback) {
     var qq = queue(10);
+    var exclude = '! -path "*node_modules*" ! -path "*.Trash*"';
 
-    exec('find ' + directory + ' ' + arg + ' -type f -iname "*.mbtiles" 2> /dev/null', function (err, stdout) {
+    exec('find ' + [directory, arg, exclude].join(' ') + ' -type f -iname "*.mbtiles" 2> /dev/null', function (err, stdout) {
         if (err) {
             log.error(err);
             return callback(err);
@@ -81,6 +82,7 @@ function statMbtile(file, callback) {
             metadata.path = file;
             metadata.basename = path.basename(file);
             metadata.dir = tildify(path.dirname(file));
+            // todo: move filesize modification to clientside
             metadata.size = filesize(stats.size);
             metadata.modified = new Date(stats.mtime);
             callback(null, metadata);
