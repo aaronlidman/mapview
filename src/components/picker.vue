@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class='bg-white-50 fixed w-50 vh-100 dt drag'>
-        <div class='dtc v-mid bg-new-yellow'>
+        <div class='dtc v-mid bg-new-red'>
             <h1 class='mb5 white f1 ttu tc'>Pick</h1>
         </div>
     </div>
@@ -39,6 +39,7 @@
 
 .filename {
     font-size: 1.25em;
+    font-weight: 500;
 }
 
 .f1 {
@@ -50,11 +51,15 @@
 }
 
 .bg-new-red {
-    background-color: #C94336;
+    background-color: #D3312B;
 }
 
 .bg-new-yellow {
     background-color: hsla(45, 87%, 60%, 1);
+}
+
+.bg-newer-yellow {
+    background-color: #FCE933;
 }
 </style>
 
