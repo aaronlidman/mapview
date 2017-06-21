@@ -16,11 +16,14 @@ function createWindow() {
     var height = Math.round(screenSize.height * 0.75);
 
     mainWindow = new BrowserWindow({
-        titleBarStyle: 'hidden',
+        titleBarStyle: 'hidden-inset',
         show: false,
-        backgroundColor: '#000',
+        backgroundColor: '#fff',
         width: width,
-        height: height
+        height: height,
+        webPreferences: {
+            nodeIntegration: false
+        }
     });
 
     mainWindow.loadURL('http://localhost:20009');
@@ -36,11 +39,11 @@ function createWindow() {
         } else {
             mainWindow.show();
         }
+        Menu.setApplicationMenu(menus(mainWindow));
     });
 }
 
 app.on('ready', function () {
-    Menu.setApplicationMenu(menus);
     server(function (err) {
         if (err) return log.error(err);
         createWindow();
