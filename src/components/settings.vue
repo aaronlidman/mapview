@@ -2,7 +2,7 @@
 <div class='bg-cool-gray'>
     <table id='navigation' class='collapse left-0 z-max bg-white fixed top-3 bold black'>
         <tr>
-            <td id='back-button' class='pa2 hover-bg-light-gray pointer' @click.once='backToPicker'>◀</td>
+            <td id='back-button' class='pa2 hover-bg-black-50 pointer' @click.once='backToPicker'>◀</td>
             <td class='ttu pa2 pr3 ma0 drag'>
                 <h1 id='title' class='ma0'>Settings</h1>
             </td>
@@ -23,6 +23,9 @@
                     <p>The location to search for available files. By default, your user directory `~/`.</p>
                 </div>
             </div>
+            <!--
+                todo: add a setting for excluding node_modules and other common paths, just a checkbox
+            -->
             <div class='w-30 fl'><br/></div>
         </div>
     </div>
