@@ -5,7 +5,7 @@
             <h1 class='avenir mb5 white f1 ttu tc'>Pick</h1>
         </div>
     </div>
-    <div id='file-list' class='pa4 w-50 fr bg-light-silver drag' v-show='!loading'>
+    <div id='file-list' class='pa4 w-50 fr bg-near-white drag' v-show='!loading'>
         <div class='dt vh-100 center'>
             <div class='dtc v-mid'>
                 <table class='collapse'>
@@ -96,6 +96,7 @@ module.exports = {
             socket.on('files', function (foundFiles) {
                 that.loading = false;
                 if (!that.files.length) {
+                    foundFiles = foundFiles.filter(function(file) { return file.format; });
                     that.files = foundFiles;
                     uniqueFiles = new Set(foundFiles.map(JSON.stringify));
                 } else {
