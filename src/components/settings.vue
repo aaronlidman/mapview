@@ -4,7 +4,7 @@
         <tr>
             <td id='back-button' class='pa2 hover-bg-black-50 pointer' @click.once='backToPicker'>◀</td>
             <td class='ttu pa2 pr3 ma0 drag'>
-                <h1 id='title' class='ma0'>Settings</h1>
+                <h1 id='title' class='avenir ma0'>Settings</h1>
             </td>
         </tr>
     </table>

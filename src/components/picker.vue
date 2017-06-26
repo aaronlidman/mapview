@@ -2,14 +2,14 @@
 <div>
     <div class='bg-white-50 fixed w-50 vh-100 dt drag'>
         <div class='dtc v-mid bg-new-red'>
-            <h1 class='mb5 white f1 ttu tc'>Pick</h1>
+            <h1 class='avenir mb5 white f1 ttu tc'>Pick</h1>
         </div>
     </div>
-    <div id='file-list' class='pa4 w-50 fr bg-white drag' v-show='!loading'>
+    <div id='file-list' class='pa4 w-50 fr bg-light-silver drag' v-show='!loading'>
         <div class='dt vh-100 center'>
             <div class='dtc v-mid'>
                 <table class='collapse'>
-                    <tr v-for='file in files' :key='file.path' @click.once='selectFile(file.path)' class='w-100 pointer hover-bg-near-white'>
+                    <tr v-for='file in files' :key='file.path' @click.once='selectFile(file.path)' class='w-100 pointer hover-bg-white'>
                         <td class='pl3'>
                             <span class='fa fa-photo black-70 fa-fw fa-lg'></span>
                         </td>
