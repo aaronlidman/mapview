@@ -9,7 +9,7 @@
         <div class='dt vh-100 center'>
             <div class='dtc v-mid'>
                 <table class='collapse'>
-                    <tr v-for='file in files' :key='file.path' @click.once='selectFile(file.path)' class='w-100 pointer hover-bg-white ba1 b--black-05 bb'>
+                    <tr v-for='file in files' :key='file.path' @click.once='selectFile(file.path)' class='w-100 pointer hover-bg-white ba1 b--black-025 bb'>
                         <td class='pl3 pr3'>
                             <span v-if="file.format == 'jpg'" class='fa fa-th black-70 fa-fw fa-lr'></span>
                             <span v-if="file.format == 'jpeg'" class='fa fa-th black-70 fa-fw fa-lr'></span>
@@ -20,7 +20,8 @@
                             <div><span class='black filename'>{{ file.basename }}</span></div>
                             <div><span class='black-40'> in {{ file.dir }}</span></div>
                         </td>
-                        <td class='black-40 tr pa1 pv3 v-mid'><span>{{ file.modified }}</span></td>
+                        <td class='dtc show-narrow black-40 tr pa1 pv3 v-mid'><span>{{ file.date }}</span></td>
+                        <td class='dtc hide-narrow black-40 tr pa1 pv3 v-mid'><span>{{ file.modified }}</span></td>
                         <td class='black-40 tr pa1 pv3 v-mid pr3'><span>{{ file.size }}</span></td>
                     </tr>
                 </table>
@@ -62,6 +63,28 @@
 .bg-newer-yellow {
     background-color: #FCE933;
 }
+
+.show-narrow { display: none; }
+.hide-narrow { display: table-cell; }
+
+@media (max-width: 1100px) {
+    .filename {
+        font-size: 1em;
+        font-weight: 500;
+    }
+
+    .pa3 { padding: .5rem; }
+    .pl3 { padding-left: .5rem; }
+    .pr3 { padding-right: .5rem; }
+    .pv3 {
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+    }
+
+    .show-narrow { display: table-cell; }
+    .hide-narrow { display: none; }
+}
+
 </style>
 
 <script>
@@ -117,6 +140,11 @@ module.exports = {
                         .sort(function (a, b) {
                             return +new Date(b.modified) - +new Date(a.modified);
                         }).map(function (file) {
+                            file.date = new Date(file.modified).toLocaleDateString('en-US');
+                            if (file.date.split('/')[2] === new Date().getFullYear().toString()) {
+                                // shorten the date even more
+                                file.date = file.date.split('/').slice(0,2).join('/');
+                            }
                             file.modified = distanceInWordsToNow(file.modified, {
                                 includeSeconds: true
                             }) + ' ago';
