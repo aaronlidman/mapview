@@ -83,7 +83,14 @@ function statMbtile(file, callback) {
             metadata.basename = path.basename(file);
             metadata.dir = tildify(path.dirname(file));
             // todo: move filesize modification to clientside
-            metadata.size = filesize(stats.size);
+            metadata.size = filesize(stats.size, {
+                round: 1,
+                output: 'object'
+            });
+            if (metadata.size.suffix !== 'GB') {
+                metadata.size.value = parseInt(metadata.size.value);
+            }
+            metadata.size = metadata.size.value + ' ' + metadata.size.suffix;
             metadata.modified = new Date(stats.mtime);
             callback(null, metadata);
         });
