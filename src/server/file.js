@@ -10,11 +10,13 @@ var tildify = require('tildify');
 var MBTiles = require('mbtiles-offline');
 var Store = require('electron-store');
 var store = new Store();
+var _ = require('lodash');
 
 module.exports = {
     scan: function (directory, socket, callback) {
         // immediately send whatever is in the cache first
-        getSetFileStore(null, socket);
+        var cached = store.get('files');
+        if (cached.length) socket.emit('files', cached);
 
         // continue scanning to look for new files and update the cache
         var q = queue(10);
@@ -34,16 +36,14 @@ module.exports = {
                 log.error(err);
                 return callback(err);
             }
-            // all searches returned, do a hard reset on the store, overwrite all files with what you have here
-            var uniq = new Set();
-            results.forEach(function (fileArray) {
-                fileArray.forEach(function (file) {
-                    uniq.add(file);
-                });
-            });
-            getSetFileStore(Array.from(uniq), socket);
-            console.log('hard reset');
 
+            // all searches returned, reset the store with everything here
+            results = _.uniqWith(_.flatten(results), _.isEqual).filter(function (file) {
+                return file.format;
+            });
+
+            // check cached, only emit if results are different from cached
+            store.set('files', results);
             callback(null);
         });
     },
@@ -56,13 +56,6 @@ module.exports = {
         });
     }
 };
-
-function getSetFileStore(files, socket) {
-    if (files) store.set('files', files);
-    var stored = store.get('files', []);
-    if (stored.length) socket.emit('files', stored);
-    return;
-}
 
 function find(directory, arg, socket, callback) {
     var qq = queue(10);
@@ -85,16 +78,8 @@ function find(directory, arg, socket, callback) {
                 log.error(err);
                 return callback(err);
             }
-
-            var stored = store.get('files', []);
-            if (stored.length) {
-                console.log('from store');
-                files = Array.from(new Set(stored.concat(files)));
-            }
-            // merge and uniq with files
-            // then store and emit
-            getSetFileStore(files, socket);
-
+            // send as a quick incremental update, to surface changes faster
+            socket.emit('update', files);
             callback(null, files);
         });
     });
@@ -116,6 +101,7 @@ function statMbtile(file, callback) {
                 round: 1,
                 output: 'object'
             });
+            // only show float starting at GBs
             if (metadata.size.suffix !== 'GB') {
                 metadata.size.value = parseInt(metadata.size.value);
             }
