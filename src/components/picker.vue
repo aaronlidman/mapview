@@ -22,7 +22,7 @@
                             <div><span class='black-40'> in {{ file.dir }}</span></div>
                         </td>
                         <td class='dtc show-narrow black-40 tr pa1 pv3 v-mid'><span>{{ file.date }}</span></td>
-                        <td class='dtc hide-narrow black-40 tr pa1 pv3 v-mid'><span>{{ file.modified }}</span></td>
+                        <td class='dtc hide-narrow black-40 tr pa1 pv3 v-mid'><span>{{ file.humanModified }}</span></td>
                         <td class='tr pa1 pv3 v-mid pr3 black-40'><span>{{ file.size }}</span></td>
                     </tr>
                 </table>
@@ -73,13 +73,10 @@
 </style>
 
 <script>
-var distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
-
 module.exports = {
     data: function () {
         return {
             loading: true,
-            loaded: false,
             files: [],
             error: null,
             socket: null
@@ -95,53 +92,24 @@ module.exports = {
     methods: {
         fetchData: function () {
             var socket = require('socket.io-client')('http://localhost:20009/picker');
+            var _ = require('lodash');
             var that = this;
-            var uniqueFiles = new Set();
 
             socket.on('connect', function () {
                 that.socket = socket;
             });
 
-            socket.on('files', function (foundFiles) {
+            socket.on('files', function (files) {
+                // full list files
                 that.loading = false;
-
-                foundFiles = foundFiles.filter(function(file) { return file.format; });
-                that.files = foundFiles;
-                uniqueFiles = new Set(foundFiles.map(JSON.stringify));
-
-                // because Vue doesn't know Sets yet
-                // I know, not ideal
-                foundFiles
-                    .filter(function(file) {
-                        return file.format;
-                    })
-                    .map(JSON.stringify)
-                    .map(function(file) {
-                        uniqueFiles.add(file);
-                    });
-
-                that.files = Array.from(uniqueFiles)
-                    .map(JSON.parse)
-                    .sort(function (a, b) {
-                        return +new Date(b.modified) - +new Date(a.modified);
-                    }).map(function (file) {
-                        file.date = new Date(file.modified).toLocaleDateString('en-US');
-                        if (file.date.split('/')[2] === new Date().getFullYear().toString()) {
-                            // shorten the date even more
-                            file.date = file.date.split('/').slice(0,2).join('/');
-                        }
-                        file.modified = distanceInWordsToNow(file.modified, {
-                            includeSeconds: true
-                        }) + ' ago';
-                        return file;
-                    });
+                that.files = files;
             });
 
-            socket.on('done', function () {
-                // todo: hide spinner completely
-                this.loaded = true;
-                // todo: cache the file list and prepopulate with it on next load
-                    // to avoid the incrimental loading jitteryness and overall just be quicker
+            socket.on('update', function(files) {
+                // incremental update of potentially new files
+                // append and uniq against what is currently available
+                that.loading = false;
+                that.files = _.uniqWith(that.files.concat(files), _.isEqual);
             });
         },
         selectFile: function(filePath) {

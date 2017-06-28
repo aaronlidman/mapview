@@ -11,11 +11,12 @@ var MBTiles = require('mbtiles-offline');
 var Store = require('electron-store');
 var store = new Store();
 var _ = require('lodash');
+var distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
 
 module.exports = {
     scan: function (directory, socket, callback) {
         // immediately send whatever is in the cache first
-        var cached = store.get('files');
+        var cached = store.get('files', []);
         if (cached.length) socket.emit('files', cached);
 
         // continue scanning to look for new files and update the cache
@@ -24,7 +25,7 @@ module.exports = {
             '-maxdepth 3',
             '-maxdepth 4',
             '-maxdepth 5',
-            ''
+            '' // searches the entire directory
         ];
 
         searchArgs.forEach(function (arg) {
@@ -38,12 +39,9 @@ module.exports = {
             }
 
             // all searches returned, reset the store with everything here
-            results = _.uniqWith(_.flatten(results), _.isEqual).filter(function (file) {
-                return file.format;
-            });
-
-            // check cached, only emit if results are different from cached
+            results = formatFiles(_.uniqWith(_.flatten(results), _.isEqual));
             store.set('files', results);
+            if (!_.isEqual(cached, results)) socket.emit('files', results);
             callback(null);
         });
     },
@@ -56,6 +54,24 @@ module.exports = {
         });
     }
 };
+
+function formatFiles(files) {
+    return files.filter(function (file) {
+        return file.format;
+    }).sort(function (a, b) {
+        return Number(b.modified) - Number(a.modified);
+    }).map(function (file) {
+        file.date = new Date(file.modified).toLocaleDateString('en-US');
+        if (file.date.split('/')[2] === new Date().getFullYear().toString()) {
+            // shorten the date even more
+            file.date = file.date.split('/').slice(0, 2).join('/');
+        }
+        file.humanModified = distanceInWordsToNow(file.modified, {
+            includeSeconds: true
+        }) + ' ago';
+        return file;
+    });
+}
 
 function find(directory, arg, socket, callback) {
     var qq = queue(10);
@@ -79,7 +95,7 @@ function find(directory, arg, socket, callback) {
                 return callback(err);
             }
             // send as a quick incremental update, to surface changes faster
-            socket.emit('update', files);
+            socket.emit('update', formatFiles(files));
             callback(null, files);
         });
     });
@@ -96,7 +112,6 @@ function statMbtile(file, callback) {
             metadata.path = file;
             metadata.basename = path.basename(file);
             metadata.dir = tildify(path.dirname(file));
-            // todo: move filesize modification to clientside
             metadata.size = filesize(stats.size, {
                 round: 1,
                 output: 'object'

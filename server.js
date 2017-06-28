@@ -60,15 +60,12 @@ function getTile(req, res) {
 }
 
 module.exports = function (callback) {
-    // todo: use websockets
-    app.get('/mbtiles/:dir', searchMbtiles);
-    app.get('/mbtiles', searchMbtiles);
     app.get('/metadata/:file', getMetadata);
     app.get('/:source/:z/:x/:y.:format', getTile);
 
     io.of('/picker')
         .on('connection', function (socket) {
-            // immediately initialize a search and respond with individual events
+            // immediately initialize a search and respond through websocket events
             searchMbtiles(homedir, socket);
         });
 
