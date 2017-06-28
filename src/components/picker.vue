@@ -104,38 +104,37 @@ module.exports = {
 
             socket.on('files', function (foundFiles) {
                 that.loading = false;
-                if (!that.files.length) {
-                    foundFiles = foundFiles.filter(function(file) { return file.format; });
-                    that.files = foundFiles;
-                    uniqueFiles = new Set(foundFiles.map(JSON.stringify));
-                } else {
-                    // because Vue doesn't know Sets yet
-                    // I know, not ideal
-                    foundFiles
-                        .filter(function(file) {
-                            return file.format;
-                        })
-                        .map(JSON.stringify)
-                        .map(function(file) {
-                            uniqueFiles.add(file);
-                        });
 
-                    that.files = Array.from(uniqueFiles)
-                        .map(JSON.parse)
-                        .sort(function (a, b) {
-                            return +new Date(b.modified) - +new Date(a.modified);
-                        }).map(function (file) {
-                            file.date = new Date(file.modified).toLocaleDateString('en-US');
-                            if (file.date.split('/')[2] === new Date().getFullYear().toString()) {
-                                // shorten the date even more
-                                file.date = file.date.split('/').slice(0,2).join('/');
-                            }
-                            file.modified = distanceInWordsToNow(file.modified, {
-                                includeSeconds: true
-                            }) + ' ago';
-                            return file;
-                        });
-                }
+                foundFiles = foundFiles.filter(function(file) { return file.format; });
+                that.files = foundFiles;
+                uniqueFiles = new Set(foundFiles.map(JSON.stringify));
+
+                // because Vue doesn't know Sets yet
+                // I know, not ideal
+                foundFiles
+                    .filter(function(file) {
+                        return file.format;
+                    })
+                    .map(JSON.stringify)
+                    .map(function(file) {
+                        uniqueFiles.add(file);
+                    });
+
+                that.files = Array.from(uniqueFiles)
+                    .map(JSON.parse)
+                    .sort(function (a, b) {
+                        return +new Date(b.modified) - +new Date(a.modified);
+                    }).map(function (file) {
+                        file.date = new Date(file.modified).toLocaleDateString('en-US');
+                        if (file.date.split('/')[2] === new Date().getFullYear().toString()) {
+                            // shorten the date even more
+                            file.date = file.date.split('/').slice(0,2).join('/');
+                        }
+                        file.modified = distanceInWordsToNow(file.modified, {
+                            includeSeconds: true
+                        }) + ' ago';
+                        return file;
+                    });
             });
 
             socket.on('done', function () {
