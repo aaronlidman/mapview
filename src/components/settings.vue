@@ -2,7 +2,7 @@
 <div class='bg-cool-gray'>
     <table id='navigation' class='collapse left-0 z-max bg-white fixed top-3 bold black'>
         <tr>
-            <td id='back-button' class='pa2 hover-bg-black-50 pointer' @click.once='backToPicker'>◀</td>
+            <td id='back-button' class='pa2 hover-bg-light-gray pointer' @click.once='backToPicker'>◀</td>
             <td class='ttu pa2 pr3 ma0 drag'>
                 <h1 id='title' class='avenir ma0'>Settings</h1>
             </td>
