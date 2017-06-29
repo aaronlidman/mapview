@@ -14,10 +14,13 @@ var _ = require('lodash');
 var distanceInWordsToNow = require('date-fns/distance_in_words_to_now');
 
 module.exports = {
-    scan: function (directory, socket, callback) {
+    scan: function (socket, callback) {
         // immediately send whatever is in the cache first
         var cached = store.get('files', []);
         if (cached.length) socket.emit('files', cached);
+
+        // todo: look for alternate directory in the store
+        var directory = '~/';
 
         // continue scanning to look for new files and update the cache
         var q = queue(10);
