@@ -11,20 +11,20 @@
     <div class='dt vh-100 center w-100'>
         <div class='dtc v-mid'>
             <div class='w-30 fl'><br/></div>
-            <div id='accessToken' class='w-20 pa3 fl'>
-                <div class='bg-white pa3 h5'>
+            <div id='accessToken' class='w-40 pa3 fl'>
+                <div class='bg-white pa3'>
                     <h2 class='mt0'>Mapbox access token</h2>
                     <p>Used for displaying street and satellite basemaps.</p>
-                    <input type='text' v-model='accessToken'>
+                    <input type='text' v-model='accessToken' class='w-100 pa2 code f6'>
                 </div>
             </div>
-            <div id='defaultpath' class='w-20 pa3 fl'>
+<!--             <div id='defaultpath' class='w-20 pa3 fl'>
                 <div class='bg-white pa3 h5'>
                     <h2 class='mt0'>Default file path</h2>
                     <p>The location to search for available files. By default, your user directory `~/`.</p>
                     <input type='text' v-model='defaultPath'>
                 </div>
-            </div>
+            </div> -->
             <!--
                 todo: add a setting for excluding node_modules and other common paths, just a checkbox
             -->
