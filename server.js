@@ -14,10 +14,11 @@ var io = require('socket.io')(server);
 app.use(express.static(path.join(__dirname, './')));
 
 var file = require('./src/server/file');
+var settings = require('./src/server/settings');
 var loadedTiles = {};
 
-function searchMbtiles(dir, socket) {
-    file.scan(dir, socket, function (err) {
+function searchMbtiles(socket) {
+    file.scan(socket, function (err) {
         if (err) return log.error(err);
         socket.emit('done');
     });
@@ -63,11 +64,18 @@ module.exports = function (callback) {
     app.get('/metadata/:file', getMetadata);
     app.get('/:source/:z/:x/:y.:format', getTile);
 
+    // immediately initialize a search and respond through websocket events
     io.of('/picker')
-        .on('connection', function (socket) {
-            // immediately initialize a search and respond through websocket events
-            searchMbtiles(homedir, socket);
+        .on('connect', searchMbtiles);
+
+    io.of('/settings')
+        .on('connect', function (socket) {
+            settings.get(socket);
+            socket.on('set', function (stuff) {
+                settings.set(stuff);
+            });
         });
+
 
     server.listen(20009);
     callback(null, 'ok');
