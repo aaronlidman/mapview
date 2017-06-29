@@ -4,6 +4,15 @@ var Menu = electron.Menu;
 
 module.exports = function (mainWindow) {
     var template = [{
+        label: 'Edit',
+        submenu: [
+            {role: 'cut'},
+            {role: 'copy'},
+            {role: 'paste'},
+            {role: 'delete'},
+            {role: 'selectall'}
+        ]
+    }, {
         label: 'View',
         submenu: [
             {role: 'reload'},
