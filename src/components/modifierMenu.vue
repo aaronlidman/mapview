@@ -13,7 +13,7 @@
             <div class='mb1'>Basemap:</div>
             <form>
                 <div v-for='map in basemaps' :key='map'>
-                    <input  v-bind:id='map' v-bind:name='map' v-bind:value='map' type='radio' v-model='selectedBasemap'>
+                    <input v-bind:id='map' v-bind:value='map' type='radio' v-model='selectedBasemap'>
                     <label v-bind:for='map' class='ml1'> {{ map }}</label>
                 </div>
             </form>
@@ -21,14 +21,10 @@
         <li>
             <div class='mb1'>Show:</div>
             <form>
-                <input type='radio' id='none' value='none' v-model='filtered' @change='$emit("update:filter", $event.target.value)'>
-                <label class='ml1' for='none'> all</label><br>
-                <input type='radio' id='points' value='points' v-model='filtered' @change='$emit("update:filter", $event.target.value)'>
-                <label class='ml1' for='points'> only points</label><br>
-                <input type='radio' id='lines' value='lines' v-model='filtered' @change='$emit("update:filter", $event.target.value)'>
-                <label class='ml1' for='lines'> only lines</label><br>
-                <input type='radio' id='polygons' value='polygons' v-model='filtered' @change='$emit("update:filter", $event.target.value)'>
-                <label class='ml1' for='polygons'> only polygons</label><br>
+                <div v-for='filter in filterChoices'>
+                    <input type='radio' v-bind:id='filter.id' v-bind:value='filter.id' v-model='filtered' @change='$emit("update:filter", $event.target.value)'>
+                    <label class='ml1' v-bind:for='filter.id'>{{ filter.text }}</label>
+                </div>
             </form>
         </li>
     </div>
@@ -40,6 +36,12 @@ module.exports = {
     props: ['filter'],
     data: function() {
         return {
+            filterChoices: [
+                {id: 'none', text: 'all'},
+                {id: 'points', text: 'points'},
+                {id: 'lines', text: 'lines'},
+                {id: 'polygons', text: 'polygons'}
+            ],
             filtered: 'none',
             show: false,
             basemaps: [
