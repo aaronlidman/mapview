@@ -13,8 +13,8 @@
             <div class='mb1'>Basemap:</div>
             <form>
                 <div v-for='map in basemaps' :key='map'>
-                    <input v-bind:id='map' v-bind:value='map' type='radio' v-model='selectedBasemap'>
-                    <label v-bind:for='map' class='ml1'> {{ map }}</label>
+                    <input v-bind:id='map.id' v-bind:value='map.id' type='radio' v-model='selectedBasemap'>
+                    <label v-bind:for='map.id' class='ml1'> {{ map.text }}</label>
                 </div>
             </form>
         </li>
@@ -45,13 +45,13 @@ module.exports = {
             filtered: 'none',
             show: false,
             basemaps: [
-                'no basemap',
-                'light',
-                'dark',
-                'satellite',
-                'streets'
+                {id: 'no_basemap', text: 'none'},
+                {id: 'light', text: 'light'},
+                {id: 'dark', text: 'dark'},
+                {id: 'satellite', text: 'satellite'},
+                {id: 'streets', text: 'streets'}
             ],
-            selectedBasemap: 'no basemap'
+            selectedBasemap: 'no_basemap'
         }
     }
 }
