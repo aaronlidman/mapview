@@ -9,7 +9,7 @@
         </tr>
     </table>
     <h4 v-if='metadata' class='z-max fixed top-0 right-0 normal white code ma2 drag' id='filename'>{{ metadata.shortFile }}</h4>
-    <modifierMenu :filter.sync='filter'></modifierMenu>
+    <modifierMenu v-bind:filter.sync='filter' v-bind:basemap.sync='basemap'></modifierMenu>
     <div id='map' class='no-drag bg-near-black w-100 vh-100'></div>
 </div>
 </template>
@@ -32,9 +32,11 @@ module.exports = {
         var hash = qs.parse(window.location.hash);
         this.filepath = encodeURIComponent(hash['/map?file']);
 
-        mapboxgl.accessToken = '';
+        mapboxgl.accessToken = 'pk.eyJ1IjoiYWFyb25saWRtYW4iLCJhIjoiNTVucTd0TSJ9.wVh5WkYXWJSBgwnScLupiQ';
 
         var that = this;
+        // todo: convert /metadata to websocket
+        // todo: get accesstoken from store via server
         request('http://localhost:20009/metadata/' + that.filepath, function (err, resp, body) {
             if (err) return log.error(err);
             that.metadata = JSON.parse(body);
@@ -52,7 +54,7 @@ module.exports = {
                     closeButton: true,
                     closeOnClick: false
                 }),
-                showInspectMap: true,
+                showInspectMap: false,
                 showInspectButton: false,
                 showMapPopupOnHover: false,
                 showInspectMapPopupOnHover: false
@@ -65,6 +67,8 @@ module.exports = {
             foregroundColor: null,
             metadata: null,
             filter: 'none',
+            basemap: 'no_basemap',
+            selectedBasemap: false,
             filepath: null,
             map: null
         };
@@ -81,6 +85,40 @@ module.exports = {
         filter: function () {
             var style = mapStyle(this.filepath, this.metadata, this.filter, this.foregroundColor);
             this.map.setStyle(style.style);
+        },
+        basemap: function () {
+            var that = this;
+            var style = mapStyle(that.filepath, that.metadata, that.filter, that.foregroundColor).style;
+
+            // set a basemap
+            if (that.basemap === 'no_basemap') {
+                that.map.setStyle(style);
+            } else {
+                that.map.setStyle('mapbox://styles/mapbox/' + that.basemap + '-v9');
+                // wait for ^ style to finish loading
+                that.map.on('sourcedata', sourceUpdate);
+
+                function sourceUpdate (event) {
+                    // insert items from `style` individually
+                    if (event.isSourceLoaded) {
+                        // wait for the style to finish loading
+                        Object.keys(style.sources).map(function (sourceKey) {
+                            if (!that.map.getSource(sourceKey)) {
+                                that.map.addSource(sourceKey, style.sources[sourceKey]);
+                            }
+                            // add all the layers for the source
+                            style.layers.map(function(layer) {
+                                if (layer.source && (layer.source == sourceKey)) {
+                                    that.map.addLayer(layer);
+                                }
+                            });
+                        });
+
+                        that.map.off('sourcedata', sourceUpdate);
+                    }
+                }
+
+            }
         }
     }
 };

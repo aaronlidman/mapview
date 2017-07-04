@@ -13,7 +13,7 @@
             <div class='mb1'>Basemap:</div>
             <form>
                 <div v-for='map in basemaps' :key='map'>
-                    <input v-bind:id='map.id' v-bind:value='map.id' type='radio' v-model='selectedBasemap'>
+                    <input v-bind:id='map.id' v-bind:value='map.id' type='radio' v-model='selectedBasemap' @change='$emit("update:basemap", $event.target.value)'>
                     <label v-bind:for='map.id' class='ml1'> {{ map.text }}</label>
                 </div>
             </form>
@@ -33,7 +33,7 @@
 
 <script>
 module.exports = {
-    props: ['filter'],
+    props: ['filter', 'basemap'],
     data: function() {
         return {
             filterChoices: [
