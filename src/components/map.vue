@@ -34,6 +34,8 @@ module.exports = {
 
         mapboxgl.accessToken = 'pk.eyJ1IjoiYWFyb25saWRtYW4iLCJhIjoiNTVucTd0TSJ9.wVh5WkYXWJSBgwnScLupiQ';
 
+        // this should eventually be abstracted into a global mixin
+
         var that = this;
         // todo: convert /metadata to websocket
         // todo: get accesstoken from store via server
@@ -78,15 +80,8 @@ module.exports = {
             this.$router.push({
                 path: '/'
             });
-        }
-    },
-    watch: {
-        // computed property just wasn't updating, could never track down why
-        filter: function () {
-            var style = mapStyle(this.filepath, this.metadata, this.filter, this.foregroundColor);
-            this.map.setStyle(style.style);
         },
-        basemap: function () {
+        setStyle: function() {
             var that = this;
             var style = mapStyle(that.filepath, that.metadata, that.filter, that.foregroundColor).style;
 
@@ -119,6 +114,15 @@ module.exports = {
                 }
 
             }
+        }
+    },
+    watch: {
+        // computed property just wasn't updating, could never track down why
+        filter: function () {
+            this.setStyle();
+        },
+        basemap: function () {
+            this.setStyle();
         }
     }
 };
