@@ -10,10 +10,11 @@
     "watch": "find src/ | entr -r npm start",
     "start": "npm run devCompile && electron .",
     "configure": "export npm_config_target=1.6.6 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install",
-    "build": "npm run configure && npm run compile && electron-packager . Mapview --overwrite && sh build-cleanup.sh",
+    "build": "npm run configure && npm run compile && npm run plist && electron-packager . Mapview --overwrite --extendInfo 'mapview-Info.plist' && sh build-cleanup.sh",
     "devCompile": "NODE_ENV=dev && npm run browserify",
     "compile": "NODE_ENV=production npm run browserify",
-    "browserify": "time browserify --fast --full-paths --transform vueify src/client/index.js -o dist/build.js"
+    "browserify": "time browserify --fast --full-paths --transform vueify src/client/index.js -o dist/build.js",
+    "plist": "node generatePlist.js > mapview-Info.plist"
   },
   "keywords": [
     "mbtiles",
@@ -52,6 +53,7 @@
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "mbtiles-offline": "^3.0.1",
+    "plist": "^2.1.0",
     "socket.io": "^2.0.3",
     "tachyons": "^4.7.4",
     "tildify": "^1.2.0"
