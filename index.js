@@ -12,8 +12,8 @@ var mainWindow;
 
 function createWindow() {
     var screenSize = electron.screen.getPrimaryDisplay().workAreaSize;
-    var width = Math.round(screenSize.width * 0.75);
-    var height = Math.round(screenSize.height * 0.75);
+    var width = Math.round(screenSize.width * 0.618);
+    var height = Math.round(screenSize.height * 0.618);
 
     mainWindow = new BrowserWindow({
         titleBarStyle: 'hidden-inset',

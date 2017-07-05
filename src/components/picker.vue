@@ -21,9 +21,9 @@
                             <div><span class='filename'>{{ file.basename }}</span></div>
                             <div><span class='black-40'> in {{ file.dir }}</span></div>
                         </td>
-                        <td class='dtc show-narrow black-40 tr pa1 pv3 v-mid'><span>{{ file.date }}</span></td>
-                        <td class='dtc hide-narrow black-40 tr pa1 pv3 v-mid'><span>{{ file.humanModified }}</span></td>
-                        <td class='tr pa1 pv3 v-mid pr3 black-40'><span>{{ file.size }}</span></td>
+                        <td class='dtc show-narrow black-40 tr pa1 pv3 v-btm'><span>{{ file.date }}</span></td>
+                        <td class='dtc hide-narrow black-40 tr pa1 pv3 v-btm'><span>{{ file.humanModified }}</span></td>
+                        <td class='tr pa1 pv3 pr3 black-40 v-btm'><span>{{ file.size }}</span></td>
                     </tr>
                 </table>
             </div>
