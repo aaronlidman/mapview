@@ -63,7 +63,7 @@ module.exports = function (mainWindow) {
         });
 
         // Window menu
-        template[2].submenu = [
+        template[3].submenu = [
             {role: 'close'},
             {role: 'minimize'},
             {role: 'zoom'},
