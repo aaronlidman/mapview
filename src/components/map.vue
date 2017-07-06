@@ -59,6 +59,7 @@ module.exports = {
                 showInspectMap: false,
                 showInspectButton: false,
                 showMapPopupOnHover: false,
+                showMapPopup: true,
                 showInspectMapPopupOnHover: false
             }));
         });
