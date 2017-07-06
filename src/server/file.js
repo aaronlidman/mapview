@@ -72,6 +72,29 @@ function formatFiles(files) {
         file.humanModified = distanceInWordsToNow(file.modified, {
             includeSeconds: true
         }) + ' ago';
+
+        var replacements = {
+            'less than': '<',
+            'over': '>',
+            'almost': '',
+            'about': '',
+            ' minute': 'min',
+            ' minutes': 'min',
+            ' hour': 'h',
+            ' hours': 'h',
+            ' day': 'd',
+            ' days': 'd',
+            ' month': 'm',
+            ' months': 'm',
+            ' year': 'y',
+            ' years': 'y'
+        };
+
+        // .reverse to knock out plurals before singular replacements
+        file.humanModified = Object.keys(replacements).reverse().reduce(function (accumulator, currentValue) {
+            return accumulator.split(currentValue).join(replacements[currentValue]);
+        }, file.humanModified);
+
         return file;
     });
 }
