@@ -10,11 +10,14 @@
                 -webkit-font-smoothing: antialiased;
                 line-height: 1.4;
                 background-color: white;
+                -webkit-user-select: none;
+            }
+            html, body {
+                overflow: hidden;
             }
             ul, li { list-style-type: none; }
             .drag { -webkit-app-region: drag; }
             .no-drag{ -webkit-app-region: no-drag; }
-            #dragbar { height: 23px; }
             label { cursor: pointer; }
             .bg-cool-gray, .bg-cool-gray:hover {
                 background-color: hsl(180, 5%, 90%);
@@ -22,14 +25,18 @@
             .helvetica {
                 font-family: helvetica neue, helvetica, arial, sans-serif;
             }
+            .caption {
+                font: caption;
+                line-height: 1.4em;
+            }
             .avenir {
                 font-family: avenir next, avenir, helvetica neue, helvetica, arial, sans-serif;
             }
+            .fa-2x { font-size: 1.5rem !important; }
+            .fw-500 { font-weight: 500; }
         </style>
     </head>
-    <body class='helvetica black-80 bg-white drag'>
-        <div class='drag fixed top-0 w-100 z-max' id='dragbar'></div>
-        <!-- todo: make dragbar into a component that each other component can manipulate styling via this.data -->
+    <body class='caption black-80 bg-white'>
         <div id='app'>
             <transition name='fade' mode='out-in'>
                 <router-view class='view'></router-view>
