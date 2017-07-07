@@ -17,7 +17,7 @@ function createWindow() {
     var height = Math.round(width * ratio);
 
     mainWindow = new BrowserWindow({
-        titleBarStyle: 'hidden-inset',
+        titleBarStyle: 'hidden',
         show: false,
         backgroundColor: '#fff',
         width: width,

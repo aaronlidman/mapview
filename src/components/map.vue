@@ -8,7 +8,9 @@
             </td>
         </tr>
     </table>
-    <h4 v-if='metadata' class='z-max fixed top-0 right-0 normal white code ma2 drag' id='filename'>{{ metadata.shortFile }}</h4>
+    <div id='titlebar' class='z-9999 fixed top-0 drag tc w-100 bg-black'>
+        <h4 v-if='metadata' class='f6 normal white ma0' id='filename'>{{ metadata.shortFile }}</h4>
+    </div>
     <modifierMenu v-bind:filter.sync='filter' v-bind:basemap.sync='basemap'></modifierMenu>
     <div id='map' class='no-drag bg-near-black w-100 vh-100'></div>
 </div>
@@ -137,7 +139,9 @@ module.exports = {
         top: 3rem;
     }
     #filename {
-        font-size: 14px;
-        text-shadow: 1px 1px 0px black;
+        margin-top: 3px;
+    }
+    .titlebar {
+        height: 23px;
     }
 </style>
