@@ -4,15 +4,17 @@
         <tr>
             <td id='back-button' class='pa2 hover-bg-light-gray pointer' @click.once='backToPicker'>◀</td>
             <td class='ttu pa2 pr3 ma0 drag'>
-                <h1 id='title' class='ma0'>View</h1>
+                <h2 id='title' class='ma0'>View</h2>
             </td>
         </tr>
     </table>
-    <div id='titlebar' class='z-9999 fixed top-0 drag tc w-100 bg-black'>
-        <h4 v-if='metadata' class='f6 normal white ma0' id='filename'>{{ metadata.shortFile }}</h4>
+    <div id='titlebar' class='z-9999 fixed top-0 drag tc w-100 bg-black-80 white dt caption fw-500'>
+        <div class='dtc v-mid'>
+            <span v-if='metadata'>{{ metadata.shortFile }}</span>
+        </div>
     </div>
     <modifierMenu v-bind:filter.sync='filter' v-bind:basemap.sync='basemap'></modifierMenu>
-    <div id='map' class='no-drag bg-near-black w-100 vh-100'></div>
+    <div id='map' class='bg-near-black w-100 vh-100'></div>
 </div>
 </template>
 
@@ -138,10 +140,7 @@ module.exports = {
     .top-3 {
         top: 3rem;
     }
-    #filename {
-        margin-top: 3px;
-    }
-    .titlebar {
-        height: 23px;
+    #titlebar {
+        height: 38px;
     }
 </style>
