@@ -1,17 +1,17 @@
 <template>
 <div>
-    <table id='navigation' class='collapse left-0 z-max fixed top-3 bold bg-white black'>
-        <tr>
-            <td id='back-button' class='pa2 hover-bg-light-gray pointer' @click.once='backToPicker'>◀</td>
-            <td class='ttu pa2 pr3 ma0 drag'>
-                <h2 id='title' class='ma0'>View</h2>
-            </td>
-        </tr>
-    </table>
-    <div id='titlebar' class='z-9999 fixed top-0 drag tc w-100 bg-black-80 white dt caption fw-500'>
-        <div class='dtc v-mid'>
-            <span v-if='metadata'>{{ metadata.shortFile }}</span>
+    <div id='titlebar' class='z-9999 fixed top-0 drag w-100 bg-black white caption fw-500'>
+        <div id='leftButtons' class='dt h-inherit fl w-third'>
+            <div class='dtc v-mid'>
+                <div class='di br2 bg-white-20 hover-bg-white-30' style='padding: 5px 10px; margin-left: 80px;' @click.once='backToPicker'><span class='f5'>‹</span> Files</div>
+            </div>
         </div>
+        <div id='fileName' class='dt fl w-third h-inherit tc nowrap'>
+            <div class='dtc v-mid'>
+                <span v-if='metadata'>{{ metadata.shortFile }}</span>
+            </div>
+        </div>
+        <div class='w-third fl h-inherit dt'></div>
     </div>
     <modifierMenu v-bind:filter.sync='filter' v-bind:basemap.sync='basemap'></modifierMenu>
     <div id='map' class='bg-near-black w-100 vh-100'></div>
@@ -141,6 +141,10 @@ module.exports = {
         top: 3rem;
     }
     #titlebar {
+        border: 1px solid #222;
+        border-bottom: none;
         height: 38px;
+        text-shadow: 0px 0px 1px black;
+        min-width: 720px;
     }
 </style>
