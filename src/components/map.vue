@@ -1,9 +1,9 @@
 <template>
 <div>
-    <div id='titlebar' class='z-9999 fixed top-0 drag w-100 bg-black white caption fw-500'>
+    <div id='titlebar' class='z-9999 fixed top-0 drag w-100 bg-new-black white caption fw-500'>
         <div id='leftButtons' class='dt h-inherit fl w-third'>
             <div class='dtc v-mid'>
-                <div class='di br2 bg-white-20 hover-bg-white-30' style='padding: 5px 10px; margin-left: 80px;' @click.once='backToPicker'><span class='f5'>‹</span> Files</div>
+                <div class='di br2 bg-white-10 hover-bg-white-20' style='padding: 5px 10px; margin-left: 80px;' @click.once='backToPicker'><span class='f5'>‹</span> Files</div>
             </div>
         </div>
         <div id='fileName' class='dt fl w-third h-inherit tc nowrap'>
@@ -141,10 +141,8 @@ module.exports = {
         top: 3rem;
     }
     #titlebar {
-        border: 1px solid #222;
-        border-bottom: none;
         height: 38px;
-        text-shadow: 0px 0px 1px black;
+        text-shadow: 1px 0px 1px black;
         min-width: 720px;
     }
 </style>
