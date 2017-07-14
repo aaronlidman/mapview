@@ -11,9 +11,10 @@
     "start": "npm run devCompile && electron .",
     "configure": "export npm_config_target=1.6.6 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install",
     "build": "npm run configure && npm run compile && npm run plist && electron-packager . Mapview --overwrite --extendInfo 'mapview-Info.plist' && sh build-cleanup.sh",
-    "devCompile": "NODE_ENV=dev && npm run browserify",
+    "devCompile": "NODE_ENV=dev && npm run watchify",
     "compile": "NODE_ENV=production npm run browserify",
-    "browserify": "time browserify --fast --full-paths --transform vueify src/client/index.js -o dist/build.js",
+    "browserify": "browserify --fast --full-paths --transform vueify src/client/index.js -o dist/build.js",
+    "watchify": "watchify --fast --full-paths --transform vueify src/client/index.js -o dist/build.js -v &",
     "plist": "node generatePlist.js > mapview-Info.plist"
   },
   "keywords": [
@@ -40,11 +41,18 @@
     "socket.io-client": "^2.0.3",
     "vue": "2.3.4",
     "vue-router": "^2.5.3",
-    "vueify": "9.4.1"
+    "vueify": "9.4.1",
+    "watchify": "^3.9.0"
   },
   "dependencies": {
     "@mapbox/tiletype": "^0.3.1",
+    "d3": "^4.9.1",
+    "d3-geo": "^1.6.4",
+    "d3-interpolate": "^1.1.5",
     "d3-queue": "^3.0.7",
+    "d3-selection": "^1.1.0",
+    "d3-timer": "^1.0.6",
+    "d3-transition": "^1.1.0",
     "date-fns": "^1.28.5",
     "electron-log": "^2.2.4",
     "electron-store": "^1.1.0",
@@ -56,7 +64,8 @@
     "plist": "^2.1.0",
     "socket.io": "^2.0.3",
     "tachyons": "^4.7.4",
-    "tildify": "^1.2.0"
+    "tildify": "^1.2.0",
+    "topojson-client": "^3.0.0"
   },
   "browser": {
     "vue": "vue/dist/vue.common.js"
