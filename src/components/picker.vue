@@ -70,11 +70,6 @@
   stroke: #333;
   stroke-width: 1px;
 }
-
-.globe-fill {
-  fill: #fff;
-  stroke: none;
-}
 </style>
 
 <script></script>
@@ -117,7 +112,8 @@ module.exports = {
             var projection = d3.geoOrthographic()
                 .translate([width / 2, height / 2])
                 .scale(Math.min(height, width) / 2 - 20)
-                .clipAngle(90);
+                .clipAngle(90)
+                .precision(0.5);
 
             var path = d3.geoPath()
                 .projection(projection);
@@ -129,12 +125,6 @@ module.exports = {
             var svg = d3.select('#map').append('svg')
                 .attr('width', width)
                 .attr('height', height);
-
-            svg.append('circle')
-                .attr('class', 'globe-fill')
-                .attr('cx', width / 2)
-                .attr('cy', height / 2)
-                .attr('r', projection.scale());
 
             var line = svg.append('path')
                 .datum(graticule)
@@ -160,11 +150,11 @@ module.exports = {
             var velocity = 0.01;
             var time = Date.now();
 
-            d3.timer(function (elapsed) {
+            d3.interval(function () {
                 var dt = Date.now() - time;
                 projection.rotate([rotate[0] + velocity * dt, rotate[1]]);
                 svg.selectAll('path').attr('d', path);
-            });
+            }, 50);
         },
         fetchData: function () {
             var socket = require('socket.io-client')('http://localhost:20009/picker');
