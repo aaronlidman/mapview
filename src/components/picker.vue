@@ -95,66 +95,74 @@ module.exports = {
     },
     methods: {
         buildMap: function () {
-            // derived from https://bl.ocks.org/mbostock/4183330
-            var d3 = Object.assign({}, require('d3-selection'), require('d3-transition'), require('d3-geo'), require('d3-interpolate'), require('d3-timer'));
-            var topojson = require('topojson-client');
-            var world = require('../../world-110m.json');
+            window.addEventListener('resize', build);
 
-            // todo: get width and height from current size
-            // todo: redraw on resize
-            var width = (window.innerWidth - 382);
-            var height = window.innerHeight;
+            build();
 
-            var centroid = d3.geoPath()
-                .projection(function(d) { return d; })
-                .centroid;
+            function build() {
+                var d3 = Object.assign({}, require('d3-selection'), require('d3-transition'), require('d3-geo'), require('d3-interpolate'), require('d3-timer'));
+                var topojson = require('topojson-client');
+                var world = require('../../world-110m.json');
 
-            var projection = d3.geoOrthographic()
-                .translate([width / 2, height / 2])
-                .scale(Math.min(height, width) / 2 - 20)
-                .clipAngle(90)
-                .precision(0.5);
+                // todo: get width and height from current size
+                // todo: redraw on resize
+                var width = (window.innerWidth - 382);
+                var height = window.innerHeight;
 
-            var path = d3.geoPath()
-                .projection(projection);
+                var centroid = d3.geoPath()
+                    .projection(function(d) { return d; })
+                    .centroid;
 
-            var graticule = d3.geoGraticule()
-                .extent([[-180, -90], [180 - .1, 90 - .1]])
-                .step([20, 20]);
+                var projection = d3.geoOrthographic()
+                    .translate([width / 2, height / 2])
+                    .scale(Math.min(height, width) / 2 - 20)
+                    .clipAngle(90)
+                    .precision(0.5);
 
-            var svg = d3.select('#map').append('svg')
-                .attr('width', width)
-                .attr('height', height);
+                var path = d3.geoPath()
+                    .projection(projection);
 
-            var line = svg.append('path')
-                .datum(graticule)
-                .attr('class', 'graticule')
-                .attr('d', path);
+                var graticule = d3.geoGraticule()
+                    .extent([[-180, -90], [180 - .1, 90 - .1]])
+                    .step([20, 20]);
 
-            var countries = topojson.feature(world, world.objects.countries).features;
+                d3.selectAll('#map svg *').remove();
+                d3.selectAll('#map svg').remove();
 
-            var country = svg.selectAll('.country')
-                .data(countries)
-                .enter()
-                    .append('path')
-                    .attr('class', 'country')
+                var svg = d3.select('#map').append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+
+                var line = svg.append('path')
+                    .datum(graticule)
+                    .attr('class', 'graticule')
                     .attr('d', path);
 
-            svg.append('circle')
-                .attr('class', 'globe-outline')
-                .attr('cx', width / 2)
-                .attr('cy', height / 2)
-                .attr('r', projection.scale());
+                var countries = topojson.feature(world, world.objects.countries).features;
 
-            var rotate = [0, -10];
-            var velocity = 0.01;
-            var time = Date.now();
+                var country = svg.selectAll('.country')
+                    .data(countries)
+                    .enter()
+                        .append('path')
+                        .attr('class', 'country')
+                        .attr('d', path);
 
-            d3.interval(function () {
-                var dt = Date.now() - time;
-                projection.rotate([rotate[0] + velocity * dt, rotate[1]]);
-                svg.selectAll('path').attr('d', path);
-            }, 50);
+                svg.append('circle')
+                    .attr('class', 'globe-outline')
+                    .attr('cx', width / 2)
+                    .attr('cy', height / 2)
+                    .attr('r', projection.scale());
+
+                var rotate = [0, -10];
+                var velocity = 0.01;
+                var time = Date.now();
+
+                d3.interval(function () {
+                    var dt = Date.now() - time;
+                    projection.rotate([rotate[0] + velocity * dt, rotate[1]]);
+                    svg.selectAll('path').attr('d', path);
+                }, 50);
+            }
         },
         fetchData: function () {
             var socket = require('socket.io-client')('http://localhost:20009/picker');
