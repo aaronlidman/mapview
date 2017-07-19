@@ -44,6 +44,8 @@
 
 <script>
 var globe = require('./globe.vue');
+var socket = require('socket.io-client')('http://localhost:20009/picker');
+var _ = require('lodash');
 
 module.exports = {
     components: {
@@ -68,8 +70,6 @@ module.exports = {
     },
     methods: {
         fetchData: function () {
-            var socket = require('socket.io-client')('http://localhost:20009/picker');
-            var _ = require('lodash');
             var that = this;
 
             socket.on('connect', function () {
@@ -87,7 +87,9 @@ module.exports = {
                 // incremental update of potentially new files
                 // append and uniq against what is currently available
                 that.loading = false;
-                that.files = _.uniqWith(that.files.concat(files), _.isEqual);
+                that.files = _.uniqWith(that.files.concat(files), function (value, anotherValue) {
+                    return value.path === anotherValue.path;
+                });
                 createBboxes(that.files);
             });
 
