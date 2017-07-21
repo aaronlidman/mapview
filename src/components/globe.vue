@@ -76,6 +76,9 @@
             this.initializeMap();
             window.addEventListener('resize', this.initializeMap);
         },
+        beforeDestroy: function () {
+            window.removeEventListener('resize', this.initializeMap);
+        },
         methods: {
             initializeMap: function () {
                 var that = this;
@@ -88,7 +91,7 @@
 
                 that.projection = d3.geoOrthographic()
                     .translate([width / 2, height / 2])
-                    .scale(width / 2 - 20)
+                    .scale(Math.min(width, height) / 2 - 20)
                     .clipAngle(90)
                     .precision(0.5)
                     .rotate([(startLoc[0] + velocity) * Date.now(), startLoc[1]]);
