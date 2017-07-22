@@ -28,8 +28,8 @@
 
 <style src='../../node_modules/font-awesome/css/font-awesome.min.css'></style>
 <style>
-#free-space { padding-right: 420px; }
-#file-list { width: 420px; }
+#free-space { padding-right: 380px; }
+#file-list { width: 380px; }
 
 .breaky {
     word-wrap: break-word;

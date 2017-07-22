@@ -64,7 +64,7 @@
                     var centroid = d3.geoCentroid(bounds);
                     var coords = [centroid[0], centroid[1]];
                     that.projection
-                        .scale(((window.innerWidth - 420)/2 * 1.5) - 20)
+                        .scale(((window.innerWidth - 380)/2 * 1.5) - 20)
                         .rotate([-coords[0], -coords[1]]);
                     d3.selectAll('#map svg path').attr('d', that.path);
                 } else {
@@ -83,7 +83,7 @@
             initializeMap: function () {
                 var that = this;
 
-                var width = (window.innerWidth - 420);
+                var width = (window.innerWidth - 380);
                 var height = window.innerHeight;
 
                 var velocity = 0.01;
