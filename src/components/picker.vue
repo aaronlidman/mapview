@@ -3,19 +3,23 @@
     <div id='free-space' class='fl fixed bg-blue w-100 vh-100 drag dt'>
         <globe v-bind:bounds.sync='bounds' v-bind:focus.sync='focus'></globe>
     </div>
-    <div id='file-list' class='fr bg-blue drag absolute right-0' v-show='!loading'>
-        <div class='dt vh-100 w-100'>
-            <div class='dtc v-mid'>
-                <table @mouseleave='hoverFile(false)' class='collapse w-100'>
-                    <tr v-for='file in files' :key='file.path' @click.once='selectFile(file.path)' @mouseenter='hoverFile(file.path)' class='f6 w-100 hover-bg-white-20 white-50'>
-                        <td class='pr1 pa3'>
-                            <div class='fw-500 white'><span>{{ file.basename }}</span></div>
-                            <div><span>{{ file.dir }}</span></div>
-                        </td>
-                        <td class='dtc tr pa1 pv3 v-btm'><span>{{ file.humanModified }}</span></td>
-                        <td class='tr pl1 pa3 v-btm'><span>{{ file.size }}</span></td>
-                    </tr>
-                </table>
+    <div id='file-list' class='fr bg-blue drag absolute right-0 overflow-scroll'>
+        <div @mouseleave='hoverFile(false)' class='w-100 overflow-scroll'>
+            <div v-for='file in files' :key='file.path' @click.once='selectFile(file.path)' @mouseenter='hoverFile(file.path)' class='f6 w-100 hover-bg-white-20 white-50 pointer pa3'>
+                <div>
+                    <span class='fw-500 white'>{{ file.basename }}</span>
+                </div>
+                <div>
+                    <span>{{ file.dir }}</span>
+                    <div class='w-40 fr nowrap tr'>
+                        <div class='w-50 fl ph2'>
+                            <span>{{ file.humanModified }}</span>
+                        </div>
+                        <div class='w-50 fr ph2'>
+                            <span>{{ file.size }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -53,7 +57,6 @@ module.exports = {
     },
     data: function () {
         return {
-            loading: true,
             files: [],
             error: null,
             socket: null,
@@ -78,20 +81,30 @@ module.exports = {
 
             socket.on('files', function (files) {
                 // full list files
-                that.loading = false;
-                that.files = files;
+                that.files = prepFiles(files);
                 createBboxes(that.files);
             });
 
             socket.on('update', function (files) {
                 // incremental update of potentially new files
                 // append and uniq against what is currently available
-                that.loading = false;
-                that.files = _.uniqWith(that.files.concat(files), function (value, anotherValue) {
-                    return value.path === anotherValue.path;
-                });
+                that.files = prepFiles(files, that.files);
                 createBboxes(that.files);
             });
+
+            function prepFiles(files, compareTo) {
+                files.forEach(function (file) {
+                    console.log(file.path, file.humanModified);
+                });
+
+                if (compareTo) {
+                    files = _.uniqWith(compareTo.concat(files), function (value, anotherValue) {
+                        return value.path === anotherValue.path;
+                    });
+                }
+
+                return files;
+            }
 
             function createBboxes(files) {
                 that.bounds = {
