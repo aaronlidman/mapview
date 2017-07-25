@@ -6,30 +6,31 @@
 
 <style>
     .country {
-      fill: #fff;
-      fill-opacity: 0.2;
-      stroke: #fff;
-      stroke-width: 0.5px;
+      fill: #ddd;
+      stroke: #ddd;
+      stroke-width: 0.2px;
       stroke-linejoin: round;
     }
 
     .graticule {
       fill: none;
-      stroke: #fff;
-      stroke-opacity: 0.2;
+      stroke: rgba(0,0,0,0.1);
       stroke-width: 0.5px;
     }
 
     .globe-outline {
       fill: none;
-      stroke: #fff;
-      stroke-width: 1px;
+      stroke: rgba(0,0,0,0.1);
+      stroke-width: 0.5px;
+    }
+
+    .globe-fill {
+        fill: #fff;
     }
 
     .bbox {
-        fill: #fff;
-        fill-opacity: 0.5;
-        stroke: #fff;
+        fill: #FF0000;
+        stroke: #FF0000;
         stroke-width: 1px;
     }
 </style>
@@ -63,8 +64,10 @@
                     that.rotationTimer.stop();
                     var centroid = d3.geoCentroid(bounds);
                     var coords = [centroid[0], centroid[1]];
+                    // this.addBounds(bounds);
                     that.projection
-                        .scale(((window.innerWidth - 380)/2 * 1.5) - 20)
+                        .precision(1)
+                        .scale(((window.innerWidth - 380)/2 * 2.25) - 20)
                         .rotate([-coords[0], -coords[1]]);
                     d3.selectAll('#map svg path').attr('d', that.path);
                 } else {
@@ -91,7 +94,7 @@
 
                 that.projection = d3.geoOrthographic()
                     .translate([width / 2, height / 2])
-                    .scale(Math.min(width, height) / 2 - 20)
+                    .scale(Math.min(width, height) / 2 - 25)
                     .clipAngle(90)
                     .precision(0.5)
                     .rotate([(startLoc[0] + velocity) * Date.now(), startLoc[1]]);
@@ -109,6 +112,11 @@
                 var svg = d3.select('#map').append('svg')
                     .attr('width', width)
                     .attr('height', height);
+
+                svg.append('path')
+                    .datum({type: 'Sphere'})
+                    .attr('class', 'globe-fill')
+                    .attr('d', that.path);
 
                 svg.append('path')
                     .datum(graticule)
@@ -136,8 +144,9 @@
             },
             addBounds: function () {
                 if (this.bounds) {
+                    console.log('setting', this.bounds);
                     d3.select('#map svg').selectAll('.bbox')
-                        .data(this.bounds.features)
+                        .data(this.bounds)
                         .enter()
                             .append('path')
                             .attr('class', 'bbox')
