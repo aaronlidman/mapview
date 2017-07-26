@@ -1,10 +1,10 @@
 <template>
 <div>
     <div id='modifiersButton' class='z-max fixed bottom-0 right-0'>
-        <span v-show='!show' @click='show = true' class='fa fa-cog white-70 hover-white fa-2x pointer pa2 pt1 pb1'></span>
+        <span v-show='!show' @click='show = true' class='fa fa-cog white-80 hover-white fa-2x pointer pa2 pt1 pb1'></span>
         <span v-show='show' @click='show = false' class='bg-white fa fa-close pointer fa-2x pa2 pt1 pb1'></span>
     </div>
-    <div id='modifierMenu' v-show='show' class='z-9999 fixed bg-white bottom-0 right-0 pa3 mb45'>
+    <div id='modifierMenu' v-show='show' class='z-9999 fixed bg-white bottom-0 right-0 pa3'>
         <!--
             - todo: select specific color pallettes
             - todo: change background/foreground color
@@ -58,7 +58,8 @@ module.exports = {
 </script>
 
 <style>
-    .mb45 {
-        margin-bottom: 2.5rem;
+    #modifierMenu {
+        margin-bottom: 32px;
+        line-height: 1.5rem;
     }
 </style>
