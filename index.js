@@ -19,7 +19,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         titleBarStyle: 'hidden-inset',
         show: false,
-        backgroundColor: '#fff',
+        backgroundColor: 'hsla(210, 5%, 15%, 1)',
         width: width,
         height: height,
         minWidth: 720,

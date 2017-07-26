@@ -52,7 +52,8 @@ module.exports = {
             that.map = new mapboxgl.Map({
                 container: 'map',
                 maxZoom: 30,
-                style: style.style
+                style: style.style,
+                maxTileCacheSize: 10000
             });
 
             that.map.addControl(new MapboxInspect({
@@ -144,5 +145,6 @@ module.exports = {
         height: 38px;
         text-shadow: 1px 0px 1px black;
         min-width: 720px;
+        border-bottom: 1px solid hsla(0,0%,0%, 0.5);
     }
 </style>
