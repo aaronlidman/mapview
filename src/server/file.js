@@ -42,7 +42,9 @@ module.exports = {
             }
 
             // all searches returned, reset the store with everything here
-            results = formatFiles(_.uniqWith(_.flatten(results), _.isEqual));
+            results = formatFiles(_.uniqWith(_.flatten(results), function (value, anotherValue) {
+                return value.path === anotherValue.path;
+            }));
             store.set('files', results);
             if (!_.isEqual(cached, results)) socket.emit('files', results);
             callback(null);
@@ -78,16 +80,18 @@ function formatFiles(files) {
             'over': '>',
             'almost': '',
             'about': '',
+            ' second': 'sec',
+            ' seconds': 'sec',
             ' minute': 'min',
             ' minutes': 'min',
             ' hour': 'h',
             ' hours': 'h',
             ' day': 'd',
             ' days': 'd',
-            ' month': 'm',
-            ' months': 'm',
-            ' year': 'y',
-            ' years': 'y'
+            ' month': 'mo',
+            ' months': 'mo',
+            ' year': 'yr',
+            ' years': 'yr'
         };
 
         // .reverse to knock out plurals before singular replacements
