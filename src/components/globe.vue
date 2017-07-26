@@ -52,7 +52,7 @@
         },
         watch: {
             bounds: function () {
-                this.addBounds();
+                if (!this.focus) this.setBounds(this.bounds);
             },
             focus: function () {
                 var that = this;
@@ -61,29 +61,30 @@
                 })[0]; // should only ever be one match
 
                 if (bounds) {
+                    var svgPath = d3.selectAll('#map svg path');
                     that.rotationTimer.stop();
                     var centroid = d3.geoCentroid(bounds);
                     var coords = [centroid[0], centroid[1]];
-                    // this.addBounds(bounds);
+                    this.setBounds([bounds]);
                     that.projection
                         .precision(1)
                         .scale(((window.innerWidth - 380)/2 * 2.25) - 20)
                         .rotate([-coords[0], -coords[1]]);
-                    d3.selectAll('#map svg path').attr('d', that.path);
+                    svgPath.attr('d', that.path);
                 } else {
-                    this.initializeMap();
+                    this.drawGlobe();
                 }
             }
         },
         mounted: function () {
-            this.initializeMap();
-            window.addEventListener('resize', this.initializeMap);
+            this.drawGlobe();
+            window.addEventListener('resize', this.drawGlobe);
         },
         beforeDestroy: function () {
-            window.removeEventListener('resize', this.initializeMap);
+            window.removeEventListener('resize', this.drawGlobe);
         },
         methods: {
-            initializeMap: function () {
+            drawGlobe: function () {
                 var that = this;
 
                 var width = (window.innerWidth - 380);
@@ -135,22 +136,23 @@
                     .attr('class', 'globe-outline')
                     .attr('d', that.path);
 
-                that.addBounds();
+                that.setBounds(this.bounds);
 
                 that.rotationTimer = d3.interval(function () {
                     that.projection.rotate([startLoc[0] + velocity * Date.now(), startLoc[1]]);
                     svg.selectAll('path').attr('d', that.path);
                 }, 50);
             },
-            addBounds: function () {
-                if (this.bounds) {
-                    console.log('setting', this.bounds);
-                    d3.select('#map svg').selectAll('.bbox')
-                        .data(this.bounds)
-                        .enter()
-                            .append('path')
-                            .attr('class', 'bbox')
-                            .attr('d', this.path);
+            setBounds: function (bounds) {
+                // bounds must be an array of features
+                bounds = (bounds && bounds.features) ? bounds.features : bounds;
+                if (bounds) {
+                    var bbox = d3.select('#map svg').selectAll('.bbox').data(bounds);
+                    bbox.enter()
+                        .append('path')
+                        .attr('class', 'bbox')
+                        .attr('d', this.path);
+                    bbox.exit().remove();
                 }
             }
         }
