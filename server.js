@@ -14,7 +14,6 @@ var io = require('socket.io')(server);
 app.use(express.static(path.join(__dirname, './')));
 
 var file = require('./src/server/file');
-var settings = require('./src/server/settings');
 var loadedTiles = {};
 
 function searchMbtiles(socket) {
@@ -67,15 +66,6 @@ module.exports = function (callback) {
     // immediately initialize a search and respond through websocket events
     io.of('/picker')
         .on('connect', searchMbtiles);
-
-    io.of('/settings')
-        .on('connect', function (socket) {
-            settings.get(socket);
-            socket.on('set', function (stuff) {
-                settings.set(stuff);
-            });
-        });
-
 
     server.listen(20009);
     callback(null, 'ok');

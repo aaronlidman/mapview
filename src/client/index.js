@@ -6,7 +6,6 @@ var log = require('electron-log');
 
 var picker = require('../components/picker.vue');
 var map = require('../components/map.vue');
-var settings = require('../components/settings.vue');
 
 Vue.use(Router);
 
@@ -19,10 +18,6 @@ var router = new Router({
         {
             path: '/map',
             component: map
-        },
-        {
-            path: '/settings',
-            component: settings
         }
     ]
 });

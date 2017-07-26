@@ -47,13 +47,6 @@ module.exports = function (mainWindow) {
             submenu: [
                 {role: 'about'},
                 {type: 'separator'},
-                {
-                    label: 'Preferences',
-                    click() {
-                        mainWindow.loadURL('http://localhost:20009/#/settings');
-                    }
-                },
-                {type: 'separator'},
                 {role: 'hide'},
                 {role: 'hideothers'},
                 {role: 'unhide'},
