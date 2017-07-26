@@ -145,6 +145,6 @@ module.exports = {
         height: 38px;
         text-shadow: 1px 0px 1px black;
         min-width: 720px;
-        border-bottom: 1px solid hsla(0,0%,0%, 0.5);
+        border-bottom: 1px solid black;
     }
 </style>
