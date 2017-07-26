@@ -27,16 +27,6 @@ function createVectorStyle(vectorLayers, filter, source, backgroundColor, foregr
     var lineLayers = [];
 
     vectorLayers.forEach(function (layer) {
-        // todo: multiple layer support, would need to remove all but one of the backgrounds here
-        styleLayers.push({
-            id: 'background',
-            type: 'background',
-            'source-layer': layer.id,
-            paint: {
-                'background-color': backgroundColor
-            }
-        });
-
         polygonLayers.push({
             id: layer.id + '-polygons',
             type: 'fill',
@@ -60,7 +50,7 @@ function createVectorStyle(vectorLayers, filter, source, backgroundColor, foregr
                 'line-cap': 'round'
             },
             paint: {
-                'line-color': foregroundColor,
+                'line-color': chroma(foregroundColor).saturate().brighten(1.5).hex(),
                 'line-width': 0.75,
                 'line-opacity': 0.75
             }
@@ -77,7 +67,7 @@ function createVectorStyle(vectorLayers, filter, source, backgroundColor, foregr
                 'line-cap': 'round'
             },
             paint: {
-                'line-color': foregroundColor,
+                'line-color': chroma(foregroundColor).saturate().brighten(1.5).hex(),
                 'line-width': 0.75,
                 'line-opacity': 0.75
             }
@@ -90,7 +80,7 @@ function createVectorStyle(vectorLayers, filter, source, backgroundColor, foregr
             'source-layer': layer.id,
             filter: ['==', '$type', 'Point'],
             paint: {
-                'circle-color': chroma(foregroundColor).saturate().brighten(2).hex(),
+                'circle-color': chroma(foregroundColor).saturate().brighten(3).hex(),
                 'circle-radius': 2,
                 'circle-opacity': 0.85
             }
@@ -101,6 +91,15 @@ function createVectorStyle(vectorLayers, filter, source, backgroundColor, foregr
     if (filter === 'lines') styleLayers = styleLayers.concat(lineLayers);
     if (filter === 'polygons') styleLayers = styleLayers.concat(polygonLayers);
     if (filter === 'none') styleLayers = styleLayers.concat(pointLayers, lineLayers, polygonLayers);
+
+    styleLayers.unshift({
+        id: 'background',
+        type: 'background',
+        'source-layer': vectorLayers[0].id,
+        paint: {
+            'background-color': backgroundColor
+        }
+    });
 
     return styleLayers;
 }
