@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div id='free-space' class='fl fixed w-100 vh-100 drag dt bg-white'>
+    <div id='free-space' class='fl fixed w-100 vh-100 drag dt bg-near-white'>
         <globe v-bind:bounds.sync='bounds' v-bind:focus.sync='focus'></globe>
     </div>
     <div id='file-list' class='fr absolute right-0 overflow-scroll vh-100 bg-white'>

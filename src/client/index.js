@@ -2,7 +2,6 @@
 
 var Vue = require('vue');
 var Router = require('vue-router');
-var log = require('electron-log');
 
 var picker = require('../components/picker.vue');
 var map = require('../components/map.vue');
@@ -22,6 +21,6 @@ var router = new Router({
     ]
 });
 
-var app = new Vue({
+new Vue({
     router: router
 }).$mount('#app');
