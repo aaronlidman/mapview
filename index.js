@@ -8,7 +8,14 @@ var BrowserWindow = electron.BrowserWindow;
 var Menu = electron.Menu;
 var menus = require('./src/app/menus');
 
+if (process.env.NODE_ENV === 'dev') {
+    log.transports.file.level = 'debug';
+} else {
+    log.transports.file.level = 'info';
+}
+
 var mainWindow;
+var openFile;
 
 function createWindow() {
     var screenSize = electron.screen.getPrimaryDisplay().workAreaSize;
@@ -24,12 +31,15 @@ function createWindow() {
         height: height,
         minWidth: 720,
         minHeight: 420,
+        devTools: (process.env.NODE_ENV === 'dev'),
         webPreferences: {
             nodeIntegration: false
         }
     });
 
-    mainWindow.loadURL('http://localhost:20009');
+    // such a quick good bad idea
+    var url = openFile ? createFileUrl(openFile) : 'http://localhost:20009';
+    mainWindow.loadURL(url);
 
     // on window close throw everything away
     mainWindow.on('closed', function () {
@@ -37,13 +47,16 @@ function createWindow() {
     });
 
     mainWindow.once('ready-to-show', function () {
-        if (process.env.NODE_ENV && process.env.NODE_ENV === 'dev') {
+        if (process.env.NODE_ENV === 'dev') {
             mainWindow.webContents.openDevTools();
-        } else {
-            mainWindow.show();
         }
+        mainWindow.show();
         Menu.setApplicationMenu(menus(mainWindow));
     });
+}
+
+function createFileUrl(filePath) {
+    return 'http://localhost:20009/#/map?file=' + encodeURIComponent(filePath);
 }
 
 app.on('ready', function () {
@@ -54,16 +67,21 @@ app.on('ready', function () {
     });
 });
 
+app.on('will-finish-launching', function () {
+    app.on('open-file', function (e, filePath) {
+        e.preventDefault();
+        log.info('got an open-file event ' + filePath);
+        if (mainWindow) mainWindow.loadURL(createFileUrl(openFile));
+        openFile = filePath;
+    });
+});
+
 app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+    if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('activate', function () {
-    if (mainWindow === null) {
-        createWindow();
-    }
+    if (mainWindow === null) createWindow();
 
     if (process.env.NODE_ENV && process.env.NODE_ENV === 'dev') {
         mainWindow.show();
