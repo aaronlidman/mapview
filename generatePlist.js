@@ -1,16 +1,20 @@
 var plist = require('plist');
 
-var json = [
-    {
-        'CFBundleTypeExtensions': [
-            'mbtiles'
-        ],
-        'CFBundleTypeName': 'MBTiles Map Tiles',
-        'CFBundleTypeRole': 'Editor',
-        'LSHandlerRank': 'Owner',
-        'LSItemContentTypes': ['com.mapbox.mbtiles'],
-        'CFBundleTypeIconFiles': ''
-    }
-];
+var json = {
+    'CFBundleDocumentTypes': [
+        {
+            'CFBundleTypeExtensions': [
+                'mbtiles'
+            ],
+            'CFBundleTypeName': 'MBTiles Map Tiles',
+            'CFBundleTypeRole': 'Editor',
+            'LSHandlerRank': 'Default',
+            'LSItemContentTypes': [
+                'com.mapbox.mbtiles'
+            ]
+        }
+    ],
+    'NSHumanReadableCopyright': 'Copyright © Aaron Lidman'
+};
 
 console.log(plist.build(json));
