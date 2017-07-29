@@ -38,7 +38,7 @@
 <script>
     var d3 = require('d3');
     var topojson = require('topojson-client');
-    var world = require('../../world-110m.json');
+    var world = require('../../static/world-110m.json');
 
     module.exports = {
         props: ['bounds', 'focus'],

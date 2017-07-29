@@ -25,7 +25,7 @@ var request = require('request');
 var log = require('electron-log');
 var MapboxInspect = require('mapbox-gl-inspect');
 
-var mapStyle = require('../client/mapStyle');
+var mapStyle = require('../mapStyle');
 var modifierMenu = require('./modifierMenu.vue');
 
 module.exports = {

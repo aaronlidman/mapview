@@ -6,12 +6,12 @@
   "main": "./index.js",
   "scripts": {
     "lint": "eslint *.js */*.js",
-    "start": "NODE_ENV='development' && npm run devCompile && electron /app --enable-logging",
-    "configure": "export npm_config_target=1.6.6 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install",
+    "start": "NODE_ENV='development' && npm run watchify && electron app/ --enable-logging",
+    "configure": "export npm_config_target=1.6.11 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install",
     "build": "npm run configure && npm run compile && npm run plist && electron-packager . Mapview --overwrite --extendInfo 'Mapview-Info.plist' && sh build-cleanup.sh",
     "compile": "export NODE_ENV='production' npm run browserify",
-    "browserify": "browserify --fast --full-paths --transform vueify src/client/index.js -o dist/build.js",
-    "watchify": "watchify --fast --full-paths --transform vueify src/client/index.js -o dist/build.js -v &",
+    "browserify": "mkdir -p app/renderer/dist/ && browserify --fast --full-paths --transform vueify app/renderer/index.js -o app/renderer/dist/build.js",
+    "watchify": "mkdir -p app/renderer/dist/ && watchify --fast --full-paths --transform vueify app/renderer/index.js -o app/renderer/dist/build.js -v",
     "plist": "node build/generatePlist.js > Mapview-Info.plist"
   },
   "keywords": [],

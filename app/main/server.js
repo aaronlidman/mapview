@@ -10,9 +10,11 @@ var MBTiles = require('mbtiles-offline');
 var tiletype = require('@mapbox/tiletype');
 var io = require('socket.io')(server);
 
-app.use(express.static(path.join(__dirname, './')));
+var staticPath = path.join(__dirname, '../');
+console.log('static path', staticPath);
+app.use(express.static(staticPath));
 
-var file = require('./src/server/file');
+var file = require('./file');
 var loadedTiles = {};
 
 function searchMbtiles(socket) {

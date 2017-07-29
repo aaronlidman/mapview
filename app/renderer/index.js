@@ -3,8 +3,8 @@
 var Vue = require('vue');
 var Router = require('vue-router');
 
-var picker = require('../components/picker.vue');
-var map = require('../components/map.vue');
+var picker = require('./components/picker.vue');
+var map = require('./components/map.vue');
 
 Vue.use(Router);
 

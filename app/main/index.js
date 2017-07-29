@@ -7,7 +7,7 @@ var BrowserWindow = electron.BrowserWindow;
 var Menu = electron.Menu;
 
 var server = require('./server');
-var menus = require('./src/app/menus');
+var menus = require('./menus');
 
 if (process.env.NODE_ENV === 'dev') {
     log.transports.file.level = 'debug';
@@ -38,7 +38,7 @@ function createWindow() {
     });
 
     // such a quick good bad idea
-    var url = openFile ? createFileUrl(openFile) : 'http://localhost:20009';
+    var url = openFile ? createFileUrl(openFile) : 'http://localhost:20009/renderer/index.html';
     mainWindow.loadURL(url);
 
     // on window close throw everything away
