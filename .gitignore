@@ -1,5 +1,5 @@
 node_modules/
 Mapview-*
-dist/
+app/renderer/dist/
 *.mbtiles
 *.plist
