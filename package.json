@@ -6,78 +6,24 @@
   "main": "./index.js",
   "scripts": {
     "lint": "eslint *.js */*.js",
-    "test": "tape test/*.js && npm run lint",
-    "watch": "find src/ | entr -r npm start",
-    "start": "export NODE_ENV=dev && npm run devCompile && electron .",
-    "configure": "export npm_config_target=1.6.6 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install",
-    "build": "npm run configure && npm run compile && npm run plist && electron-packager . Mapview --overwrite --extendInfo 'mapview-Info.plist' && sh build-cleanup.sh",
-    "devCompile": "npm run watchify",
-    "compile": "export NODE_ENV=production npm run browserify",
-    "browserify": "browserify --fast --full-paths --transform vueify src/client/index.js -o dist/build.js",
-    "watchify": "watchify --fast --full-paths --transform vueify src/client/index.js -o dist/build.js -v &",
-    "plist": "node generatePlist.js > mapview-Info.plist"
+    "start": "NODE_ENV='development' && npm run watchify && electron app/ --enable-logging",
+    "configure": "export npm_config_target=1.6.11 && export npm_config_disturl=https://atom.io/download/electron && export npm_config_runtime=electron && export npm_config_build_from_source=true && HOME=~/.electron-gyp npm install",
+    "build": "npm run configure && npm run compile && npm run plist && electron-packager . Mapview --overwrite --extendInfo 'Mapview-Info.plist' && sh build-cleanup.sh",
+    "compile": "export NODE_ENV='production' npm run browserify",
+    "browserify": "mkdir -p app/renderer/dist/ && browserify --fast --full-paths --transform vueify app/renderer/index.js -o app/renderer/dist/build.js",
+    "watchify": "mkdir -p app/renderer/dist/ && watchify --fast --full-paths --transform vueify app/renderer/index.js -o app/renderer/dist/build.js -v &",
+    "plist": "node build/generatePlist.js > Mapview-Info.plist"
   },
-  "keywords": [
-    "mbtiles",
-    "map",
-    "maps",
-    "view",
-    "gl",
-    "electron"
-  ],
-  "author": "Aaron Lidman <aaronlidman@gmail.com>",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/aaronlidman/mapview.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aaronlidman/mapview/issues"
+  },
+  "author": "Aaron Lidman",
   "license": "MIT",
-  "devDependencies": {
-    "browserify": "^14.3.0",
-    "chroma-js": "^1.3.4",
-    "electron": "1.6.11",
-    "electron-packager": "^8.7.0",
-    "eslint": "^2.13.1",
-    "eslint-config-mourner": "^2.0.1",
-    "mapbox-gl": "^0.39.1",
-    "mapbox-gl-inspect": "^1.2.3",
-    "query-string": "^4.3.4",
-    "request": "^2.81.0",
-    "socket.io-client": "^2.0.3",
-    "vue": "2.3.4",
-    "vue-router": "^2.5.3",
-    "vueify": "9.4.1",
-    "watchify": "^3.9.0"
-  },
-  "dependencies": {
-    "@mapbox/tiletype": "^0.3.1",
-    "d3": "^4.9.1",
-    "d3-geo": "^1.6.4",
-    "d3-interpolate": "^1.1.5",
-    "d3-queue": "^3.0.7",
-    "d3-selection": "^1.1.0",
-    "d3-timer": "^1.0.6",
-    "d3-transition": "^1.1.0",
-    "date-fns": "^1.28.5",
-    "electron-log": "^2.2.4",
-    "electron-store": "^1.1.0",
-    "express": "^4.14.0",
-    "filesize": "^3.5.10",
-    "font-awesome": "^4.7.0",
-    "lodash": "^4.17.4",
-    "mbtiles-offline": "^3.0.1",
-    "plist": "^2.1.0",
-    "socket.io": "^2.0.3",
-    "tachyons": "^4.7.4",
-    "tildify": "^1.2.0",
-    "topojson-client": "^3.0.0"
-  },
-  "browser": {
-    "vue": "vue/dist/vue.common.js"
-  },
-  "eslintConfig": {
-    "extends": "mourner",
-    "rules": {
-      "no-new": "off",
-      "new-cap": "off",
-      "consistent-return": "off"
-    }
-  },
   "contributors": [
     "Rodolfo Wilhelmy <rwilhelmy@gmail.com> (http://wilhel.me)",
     "Nick Ingalls <nick@mapbox.com>",
@@ -85,11 +31,12 @@
     "Andrew Harvey <andrew@alantgeo.com.au>",
     "Lukas Martinelli <me@lukasmartinelli.ch>"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/aaronlidman/mapview.git"
-  },
-  "bugs": {
-    "url": "https://github.com/aaronlidman/mapview/issues"
+  "devDependencies": {
+    "electron": "^1.6.11",
+    "eslint": "^4.3.0",
+    "browserify": "^14.4.0",
+    "plist": "^2.1.0",
+    "vueify": "^9.4.1",
+    "watchify": "^3.9.0"
   }
 }
