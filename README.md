@@ -1,26 +1,17 @@
-[![Build Status](https://travis-ci.org/aaronlidman/mapview.svg?branch=master)](https://travis-ci.org/aaronlidman/mapview)
+# mapview (in progress)
 
-# mapview
+A quick way to view geo data without having to upload it to a remote service.
 
-View mbtiles locally. A quick way to inspect what is in your mbtiles file without having to upload it to a remote service.
+![](https://i.imgur.com/ibffl64.png)
 
-```bash
-% npm install -g mapview
-% export MAPBOX_ACCESS_TOKEN='pk.0000.1111' # a mapbox public token
-% mapview ~/roads.mbtiles
-```
+![](https://i.imgur.com/0Dca5fZ.jpg)
 
-Type `mapview --help` to see the parameters available.
+![](https://i.imgur.com/kOWy3tC.jpg)
 
-**Examples**
+![](https://i.imgur.com/mVbN9S4.jpg)
 
-![awesome 1](https://cloud.githubusercontent.com/assets/58878/15119908/fc49b9b8-15c7-11e6-99b8-8a590df46c37.png)
-
-![awesome 2](https://cloud.githubusercontent.com/assets/58878/15119925/0a974634-15c8-11e6-852b-a7d411cd407f.png)
-
-![awesome 3](https://cloud.githubusercontent.com/assets/58878/15120006/61715756-15c8-11e6-8219-3fb3c8389462.png)
-
-**Why**
-- To inspect data locally quicker
-- To avoid upload size limitations
-- To avoid tile size limitations
+Goals:
+- use/learn electron
+- use/learn Vue.js
+- view a variety of files and formats
+- local analysis
