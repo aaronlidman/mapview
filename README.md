@@ -4,7 +4,7 @@ A quick way to view geo data without having to upload it to a remote service.
 
 ![](https://i.imgur.com/ibffl64.png)
 
-![](https://i.imgur.com/0Dca5fZ.jpg)
+![](https://i.imgur.com/hHJwdjY.jpg)
 
 ![](https://i.imgur.com/kOWy3tC.jpg)
 
